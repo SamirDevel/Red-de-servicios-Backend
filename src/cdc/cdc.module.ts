@@ -20,7 +20,7 @@ import { Module } from '@nestjs/common';
                     database:config.get<string>('DB_NAME_CDC'),
                     synchronize:false,
                     entities:[],
-                    logging:true,
+                    logging:false,
                     options:{
                         trustServerCertificate:true
                     }

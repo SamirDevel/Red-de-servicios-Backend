@@ -1,6 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import UsuarioEntity from 'src/usuarios/usuarios.entity';
 
 @Module({
     imports:[
@@ -17,9 +18,9 @@ import { Module } from '@nestjs/common';
                     port:config.get<number>('DB_PORT'),
                     username:config.get<string>('DB_USER'),
                     password:config.get<string>('DB_PASSWORD'),
-                    database:config.get<string>('DB_NAME_CMP'),
+                    database:config.get<string>('DB_NAME_DES'),
                     synchronize:false,
-                    entities:[],
+                    entities:[UsuarioEntity],
                     logging:false,
                     options:{
                         trustServerCertificate:true
@@ -29,4 +30,4 @@ import { Module } from '@nestjs/common';
         })
     ]
 })
-export class CmpModule {}
+export class DesarrollosModule {}
