@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsuariosModule } from './usuarios/usuarios.module';
-import { CdcModule } from './cdc/cdc.module';
-import { CmpModule } from './cmp/cmp.module';
-import { DesarrollosModule } from './desarrollos/desarrollos.module';
+import { ORMModule } from './ORMModule/orm.module';
+import modulosCMP from './entidades/modulos';
+import modulosDES from './entidadesDesarrollos/modulos';
 
 @Module({
-  imports: [DesarrollosModule, CdcModule, CmpModule, UsuariosModule],
+  imports: [ORMModule, ...modulosCMP, ...modulosDES],
   controllers: [AppController],
   providers: [AppService],
 })

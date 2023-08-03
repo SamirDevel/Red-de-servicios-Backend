@@ -15,4 +15,9 @@ export class UsuariosService {
 
         return this.repo.save(nuevousuario);
     }
+
+    async list(){
+        const lista = await this.repo.find();
+        return lista;
+    }
 }

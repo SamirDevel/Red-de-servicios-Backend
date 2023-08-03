@@ -1,0 +1,1 @@
+export type empresa = 'cdc'|'cmp'|'corp';
