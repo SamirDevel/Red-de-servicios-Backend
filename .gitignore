@@ -1,5 +1,5 @@
 #http
-src/usuarios/user.http
+src/usuarios/posts.http
 #Enviroment
 .env
 
