@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import {TypeOrmModule} from '@nestjs/typeorm';
-import { ClientesService } from './clientes.service';
-import { ClientesController } from './clientes.controller';
+import { FacturacionService } from './facturacion.service';
+import { FacturacionController } from './facturacion.controller';
 import entidadesList from 'src/entidades';
 
 @Module({
@@ -9,7 +9,7 @@ import entidadesList from 'src/entidades';
     TypeOrmModule.forFeature(entidadesList,'cdc'),
     TypeOrmModule.forFeature(entidadesList,'cmp')
   ],
-  controllers: [ClientesController],
-  providers: [ClientesService]
-  })
-export class ClientesModule {}
+  providers: [FacturacionService],
+  controllers: [FacturacionController]
+})
+export class FacturacionModule {}

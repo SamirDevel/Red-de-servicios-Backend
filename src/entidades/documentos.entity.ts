@@ -1,5 +1,9 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, VirtualColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, ManyToOne, 
+    JoinColumn, VirtualColumn, OneToMany
+} from "typeorm";
 import Externos from "./externos.entity";
+import Agente from "./agentes.entity";
+import AsocCargosAbonos from "./asociacion.cargos.abonos";
 
 @Entity({name:'admDocumentos'})
 export default class Documento{
@@ -21,7 +25,7 @@ export default class Documento{
     @Column({name:'CFECHA'})
     expedicion:Date
     
-    @VirtualColumn({query: (alias)=>`CFECHA + (SELECT admClientes.[CDIASCREDITOCLIENTE]
+    @VirtualColumn({query: (alias)=>`${alias}.CFECHA + (SELECT admClientes.[CDIASCREDITOCLIENTE]
      FROM admClientes
      WHERE admCLientes.CIDCLIENTEPROVEEDOR = ${alias}.CIDCLIENTEPROVEEDOR)`
     })
@@ -37,7 +41,9 @@ export default class Documento{
     @Column({name:'CRFC'})
     rfc:string
     
-    @Column({name:'CIDAGENTE'})
+    @ManyToOne(() =>Agente, (agente)=>agente.documentos)
+    @JoinColumn({name:'CIDAGENTE'})
+    //@Column({name:'CIDAGENTE'})
     idAgente:number
     
     @Column({name:'CFECHAVENCIMIENTO'})
@@ -100,7 +106,7 @@ export default class Documento{
     @Column({name:'CESTADOCONTABLE'})
     estadoContable:number;
     
-    @Column({name:'CNETO'})
+    @Column('decimal',{name:'CNETO', scale:6})
     neto:number
     
     @Column({name:'CIMPUESTO1'})
@@ -136,16 +142,16 @@ export default class Documento{
     @Column({name:'CGASTO3'})
     gasto3:number
     
-    @Column({name:'CTOTAL'})
+    @Column('decimal',{name:'CTOTAL', scale:6})
     total:number
 
-    @Column({name:'CPENDIENTE'})
+    @Column('decimal',{name:'CPENDIENTE', scale:6})
     pendiente:number
     
     @VirtualColumn({
         query: alias=>`CASE
-            WHEN CPENDIENTE > 0
-                THEN (DATEDIFF(DAY,GETDATE(),([CFECHA] + 
+            WHEN ${alias}.CPENDIENTE > 0
+                THEN (DATEDIFF(DAY,GETDATE(),(${alias}.CFECHA + 
                     (SELECT admClientes.[CDIASCREDITOCLIENTE] FROM admClientes WHERE admClientes.CIDCLIENTEPROVEEDOR = ${alias}.CIDCLIENTEPROVEEDOR)
                      + 5)))
             ELSE 0
@@ -293,5 +299,8 @@ export default class Documento{
     
     @Column({name:'CVERESQUE'})
     veresque:string
+
+    @OneToMany(()=> AsocCargosAbonos, asoc=>asoc.idCargo)
+    pagos:AsocCargosAbonos[]
 
 }

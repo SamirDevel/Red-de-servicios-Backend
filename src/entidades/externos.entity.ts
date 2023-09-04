@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, OneToMany, VirtualColumn, AfterLoad } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToMany, VirtualColumn } from "typeorm";
 import Documento from "./documentos.entity";
 import Domicilio from "./domicilios.entity";
 
@@ -70,13 +70,25 @@ export default class Externo{
      clasificacionCliente6:number
     
     @VirtualColumn({
-        query:alias=>`CASE
+        query:alias=>`SELECT CCODIGOVALORCLASIFICACION 
+        FROM admClasificacionesValores
+        WHERE admClasificacionesValores.CIDVALORCLASIFICACION =
+        (CASE
             WHEN DB_NAME() = '${process.env.DB_NAME_CDC}' THEN ${alias}.CIDVALORCLASIFCLIENTE2
             WHEN DB_NAME() = '${process.env.DB_NAME_CMP}' THEN ${alias}.CIDVALORCLASIFCLIENTE4
-        END`
+        END)`
             
     })
     clasificacionClienteReal:number
+
+    @VirtualColumn({
+        query:alias=>`SELECT 
+            admClasificacionesValores.CVALORCLASIFICACION
+        FROM admClasificacionesValores 
+        WHERE admClasificacionesValores.CIDVALORCLASIFICACION = ${alias}.CIDVALORCLASIFCLIENTE1`
+            
+    })
+    ruta:number
 
     @Column({name:'CTIPOCLIENTE'})
     tipo:number

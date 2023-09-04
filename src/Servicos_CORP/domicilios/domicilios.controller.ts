@@ -11,6 +11,7 @@ export class DomiciliosController {
     @Get('/:empresa/todos')
     async getDocs(@Param('empresa') empresa:empresa){
         try {
+            fns.validarEmpresa(empresa)
             let builder = await this.domService.getAll(empresa);
             console.log(await builder.getMany())
             return await builder.getMany()
