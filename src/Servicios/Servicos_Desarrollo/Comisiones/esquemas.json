@@ -1,0 +1,82 @@
+[
+  {
+    "nombre": "Vendedores",
+    "rangos": [
+      {
+        "cantidad": 148999.99,
+        "porcentaje": "0.5",
+        "id": 0
+      },
+      {
+        "cantidad": 299999.99,
+        "porcentaje": "1.0",
+        "id": 1
+      },
+      {
+        "cantidad": 399999.99,
+        "porcentaje": "1.10",
+        "id": 2
+      },
+      {
+        "cantidad": 699999.99,
+        "porcentaje": "1.20",
+        "id": 3
+      },
+      {
+        "cantidad": 999999.99,
+        "porcentaje": "1.30",
+        "id": 4
+      },
+      {
+        "cantidad": 99999999,
+        "porcentaje": "1.40",
+        "id": 5
+      }
+    ],
+    "id": 0
+  },
+  {
+    "nombre": "Mesa de control",
+    "rangos": [
+      {
+        "cantidad": 1,
+        "porcentaje": "0.10",
+        "id": 0
+      }
+    ],
+    "id": 1
+  },
+  {
+    "nombre": "Gerencia",
+    "rangos": [
+      {
+        "cantidad": 1,
+        "porcentaje": "0.30",
+        "id": 0
+      }
+    ],
+    "id": 2
+  },
+  {
+    "nombre": "Esquema Nuevo",
+    "rangos": [
+      {
+        "cantidad": 1,
+        "porcentaje": "1.0",
+        "id": 0
+      }
+    ],
+    "id": 3
+  },
+  {
+    "nombre": "Logistica",
+    "rangos": [
+      {
+        "cantidad": 1,
+        "porcentaje": "0.15",
+        "id": 0
+      }
+    ],
+    "id": 4
+  }
+]

@@ -1,0 +1,28 @@
+[
+    {"codigo":"TPXX00","tipo":"Permiso no contemplado", "descripcion":"En el catálogo."}
+    ,{"codigo":"TPAF01","tipo":"Autotransporte Federal", "descripcion":"De carga general."}
+    ,{"codigo":"TPAF02","tipo":"Transporte privado", "descripcion":"De carga."}
+    ,{"codigo":"TPAF03","tipo":"Autotransporte Federal", "descripcion":"De Carga Especializada de materiales y residuos peligrosos."}
+    ,{"codigo":"TPAF04","tipo":"Transporte de automóviles", "descripcion":"Sin rodar en vehículo tipo góndola."}
+    ,{"codigo":"TPAF05","tipo":"Transporte de carga", "descripcion":"De gran peso y/o volumen de hasta 90 toneladas."}
+    ,{"codigo":"TPAF06","tipo":"Transporte de carga", "descripcion":"Especializada de gran peso y/o volumen de más 90 toneladas."}
+    ,{"codigo":"TPAF07","tipo":"Transporte Privado", "descripcion":"Se materiales y residuos peligrosos."}
+    ,{"codigo":"TPAF08","tipo":"Autotransporte internacional", "descripcion":"De carga de largo recorrido."}
+    ,{"codigo":"TPAF09","tipo":"Autotransporte internacional", "descripcion":"De carga especializada de materiales y residuos peligrosos de largo recorrido."}
+    ,{"codigo":"TPAF10","tipo":"Autotransporte Federal", "descripcion":"De Carga General cuyo ámbito de aplicación comprende la franja fronteriza con Estados Unidos."}
+    ,{"codigo":"TPAF11","tipo":"Autotransporte Federal", "descripcion":"De Carga Especializada cuyo ámbito de aplicación comprende la franja fronteriza con Estados Unidos."}
+    ,{"codigo":"TPAF12","tipo":"Servicio auxiliar", "descripcion":"De arrastre en las vías generales de comunicación."}
+    ,{"codigo":"TPAF13","tipo":"Servicio auxiliar", "descripcion":"De servicios de arrastre, arrastre y salvamento, y depósito de vehículos en las vías generales de comunicación."}
+    ,{"codigo":"TPAF14","tipo":"Servicio de paquetería y mensajería", "descripcion":"En vías generales de comunicación."}
+    ,{"codigo":"TPAF15","tipo":"Transporte especial", "descripcion":"Para tránsito de grúas industriales con peso máximo de 90 toneladas."}
+    ,{"codigo":"TPAF16","tipo":"Servicio federal", "descripcion":"Para empresas arrendadoras servicio público federal."}
+    ,{"codigo":"TPAF17","tipo":"Empresas trasladistas", "descripcion":"De vehículos nuevos."}
+    ,{"codigo":"TPAF18","tipo":"Empresas fabricantes o distribuidoras de vehículos", "descripcion":"Nuevos."}
+    ,{"codigo":"TPAF19","tipo":"Autorización expresa", "descripcion":"Para circular en los caminos y puentes de jurisdicción federal con configuraciones de tractocamión doblemente articulado."}
+    ,{"codigo":"TPAF20","tipo":"Autotransporte Federal", "descripcion":"De Carga Especializada de fondos y valores."}
+    ,{"codigo":"TPTM01","tipo":"Permiso temporal", "descripcion":"Para navegación de cabotaje"}
+    ,{"codigo":"TPTA01","tipo":"Concesión y/o autorización", "descripcion":"Para servicio regular nacional y/o internacional para empresas mexicanas"}
+    ,{"codigo":"TPTA02","tipo":"Permiso para el servicio aéreo regular", "descripcion":"De empresas extranjeras"}
+    ,{"codigo":"TPTA03","tipo":"Permiso para el servicio nacional e internacional", "descripcion":"No regular de fletamento"}
+    ,{"codigo":"TPTA04","tipo":"Permiso para el servicio nacional e internacional", "descripcion":"No regular de taxi aéreo"}
+]

@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import entidadesDesList from 'src/entidadesDesarrollos';
-import entidadesList from 'src/entidades';
-
+import entidadesList from 'src/entidades/entidadesCORP';
+import entidadesCuentas from 'src/entidades/entidadesDesarrollos/Cuentas';
+import entidadesViajes from 'src/entidades/entidadesDesarrollos/Viajes';
+import ComisionesEntities from 'src/entidades/entidadesDesarrollos/Comisiones';
+import AlmacenList from 'src/entidades/entidadesDesarrollos/Almacen';
+import entidadesBitacora from 'src/entidades/entidadesDesarrollos/Bitacora';
+const responseTime = 1920000;
 function dbsConfig(dbname:string, config:ConfigService, list:[]){
     type dbtype ='mssql'
     const myType:dbtype = 'mssql'
@@ -16,9 +20,14 @@ function dbsConfig(dbname:string, config:ConfigService, list:[]){
         database:config.get<string>(dbname),
         synchronize:false,
         entities:list,
-        logging:true,
+        logging:false,
         options:{
-            trustServerCertificate:true
+            trustServerCertificate:true,
+            connectTimeout: responseTime,
+            requestTimeout: responseTime,
+            timeout: responseTime,
+            maxQueryExecutionTime:responseTime,
+            poolSize:1,
         }
     }
 }
@@ -30,9 +39,31 @@ function dbsConfig(dbname:string, config:ConfigService, list:[]){
             envFilePath:'.env'
         }),
         TypeOrmModule.forRootAsync({
+            name:'cuentas',
             inject:[ConfigService],
             useFactory:(config:ConfigService)=>{
-                return dbsConfig('DB_NAME_DES',config, entidadesDesList);
+                return dbsConfig('DB_NAME_CUENTAS',config, entidadesCuentas);
+            }
+        }),
+        TypeOrmModule.forRootAsync({
+            name:'viajes',
+            inject:[ConfigService],
+            useFactory:(config:ConfigService)=>{
+                return dbsConfig('DB_NAME_VIAJES',config, entidadesViajes);
+            }
+        }),
+        TypeOrmModule.forRootAsync({
+            name:'alm',
+            inject:[ConfigService],
+            useFactory:(config:ConfigService)=>{
+                return dbsConfig('DB_NAME_ALM',config, AlmacenList);
+            }
+        }),
+        TypeOrmModule.forRootAsync({
+            name:'comisiones',
+            inject:[ConfigService],
+            useFactory:(config:ConfigService)=>{
+                return dbsConfig('DB_NAME_COMISIONES',config, ComisionesEntities);
             }
         }),   
         TypeOrmModule.forRootAsync({
@@ -47,6 +78,13 @@ function dbsConfig(dbname:string, config:ConfigService, list:[]){
             inject:[ConfigService],
             useFactory:(config:ConfigService)=>{
                 return dbsConfig('DB_NAME_CMP',config, entidadesList);
+            }
+        }),
+        TypeOrmModule.forRootAsync({
+            name:'bitacora',
+            inject:[ConfigService],
+            useFactory:(config:ConfigService)=>{
+                return dbsConfig('DB_NAME_BITACORA',config, entidadesBitacora);
             }
         })
     ]
