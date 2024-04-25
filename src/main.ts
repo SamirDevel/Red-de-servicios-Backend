@@ -4,15 +4,18 @@ import { AppModule } from './app.module';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { AuthGuard } from './interceptors/sessions interceptors/auth.guard';
 import * as session from 'express-session'
-
-const witheList = ['http://192.168.1.89:3001']
+import whitelist from './whiteList';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   //CORS
   const CorsOptions:CorsOptions= {
     origin:function(origin, callback){
-      if(witheList.indexOf(origin)!=-1)callback(null, true)
-      else callback(new Error('IP no permitida'))
+      try {
+        if(whitelist.indexOf(origin)!=-1)callback(null, true)
+        else callback(new Error('IP no permitida'))
+      } catch (error) {
+        return {mensaje:error}
+      }
     },
     methods: '*',
     credentials:true,
