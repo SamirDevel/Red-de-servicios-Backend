@@ -40,4 +40,12 @@ export default class ConsultaViajeDTO{
     @IsString()
     @IsOptional()
     estatus:string
+
+    @IsString()
+    @IsOptional()
+    serieFactura:string
+
+    @IsString()
+    @IsOptional()
+    folioFactura:string
 }

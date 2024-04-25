@@ -10,6 +10,7 @@ import entidadesList from 'src/entidades/entidadesCORP';
 import entidadesCuentas from 'src/entidades/entidadesDesarrollos/Cuentas';
 import entidadesBitacora from 'src/entidades/entidadesDesarrollos/Bitacora';
 import { BitacoraService } from '../bitacora/bitacora.service';
+import { FacturaCerradaService } from './factura_cerrada/factura_cerrada.service';
 @Module({
     imports:[
       TypeOrmModule.forFeature(entidadesList,'cdc'),
@@ -23,7 +24,8 @@ import { BitacoraService } from '../bitacora/bitacora.service';
       ChoferService, 
       ViajesService, 
       UsuariosService,
-      BitacoraService
+      BitacoraService,
+      FacturaCerradaService
     ],
     controllers: [ViajesController]
   })

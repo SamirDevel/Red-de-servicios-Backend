@@ -25,6 +25,8 @@ interface filtros{
     KmF:number
     horaI:number
     horaF:number
+    serieFactura:string
+    folioFactura:string
 }
 interface registrable{
     responsable:string
@@ -102,6 +104,10 @@ export class ViajesService {
                     query.andWhere('vjs.usuario = :usuario',{usuario:filtros.usuario})
                 if(filtros.estatus !==undefined)
                     query.andWhere('vjs.estatus = :estatus',{estatus:filtros.estatus})
+                if(filtros.serieFactura !==undefined)
+                    query.andWhere('det.serie = :serieF',{serieF:filtros.serieFactura})
+                if(filtros.folioFactura !==undefined)
+                    query.andWhere('det.Folio = :folioF',{folioF:filtros.folioFactura})
             }
             return await query.getMany();
         } catch (error) {
@@ -160,7 +166,7 @@ export class ViajesService {
             }
             //console.log('viaje');
             //console.log(viaje);
-            await this.viajesRepo.save(viaje);
+            //await this.viajesRepo.save(viaje);
             return 'Viaje actualizado con exito';
         } catch (error) {
             console.log(error);
@@ -172,5 +178,42 @@ export class ViajesService {
         return await this.serieRepo.createQueryBuilder('ser')
             .select('ser.serie')
             .getMany();
+    }
+    private querySinRelacion(bdname:'cdc'|'cmp'){
+        const base = (()=>{
+            if(bdname==='cdc')return process.env.DB_NAME_CDC;
+            if(bdname==='cmp')return process.env.DB_NAME_CMP;
+        })()
+        return `SELECT CSERIEDOCUMENTO, CFOLIO, CTOTAL, CFECHA, (CASE 
+            WHEN cli.CRFC = 'XAXX010101000' THEN cli.CTEXTOEXTRA3 ELSE cli.CRAZONSOCIAL END) AS NOMBRE
+        FROM ${base}.dbo.admDocumentos doc
+        LEFT JOIN ${base}.dbo.admClientes cli ON doc.CIDCLIENTEPROVEEDOR = cli.CIDCLIENTEPROVEEDOR
+        LEFT JOIN ${base}.dbo.admClasificacionesValores val ON cli.CIDVALORCLASIFCLIENTE1 = val.CIDVALORCLASIFICACION
+        WHERE CIDDOCUMENTODE = 4
+        AND CCANCELADO = 0
+        AND val.CCODIGOVALORCLASIFICACION != 'INT'`
+    }
+    async getSinRelacion(){
+        const querySinRelacion = `SELECT facs.CSERIEDOCUMENTO AS serie
+            ,facs.CFOLIO AS folio
+            ,facs.CTOTAL AS  total
+            ,facs.CFECHA AS expedicion 
+            ,facs.NOMBRE as nombre
+        FROM (
+            ${this.querySinRelacion('cdc')}
+            UNION
+            ${this.querySinRelacion('cmp')}
+        ) facs
+        LEFT JOIN [dbo].[Detalle_Viaje] det ON det.Serie = facs.CSERIEDOCUMENTO AND det.Folio = facs.CFOLIO
+        LEFT JOIN [dbo].[Facturas_Cerradas] cer ON cer.Serie = facs.CSERIEDOCUMENTO AND cer.Folio = facs.CFOLIO
+        WHERE (det.Serie  IS NULL AND det.Folio IS NULL)
+        AND (cer.Serie  IS NULL AND cer.Folio IS NULL)
+        AND (CFECHA <= (GETDATE()-5) AND CFECHA >= (GETDATE()-30))`
+        try {
+            return  await this.viajesRepo.query(querySinRelacion)
+        } catch (error) {
+            console.log(error);
+            return {mensaje:'Algo salio mal al obtener las facturas sin relacion. Reportar a soporte tecnico'}
+        }
     }
 }
