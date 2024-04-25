@@ -101,3 +101,16 @@ export function setApendices(ruta:string, elementos:any[]){
 export function fixed(number:number){
     return parseFloat(number.toFixed(2));
 }
+function addZeroFirst(number:number){
+    return number<10?`0${number}`:number
+}
+export function dateString(date:Date){
+    //const day = new Date();
+    return `${date.getUTCFullYear()}-${addZeroFirst(date.getUTCMonth()+1)}-${addZeroFirst(date.getUTCDate())}`
+}
+export function getToday(){
+    const today = new Date();
+    today.setUTCHours(0,0,0,0);
+    return dateString(today);
+}
+export * as fns from './funciones'
