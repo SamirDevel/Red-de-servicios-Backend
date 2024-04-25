@@ -17,6 +17,8 @@ import { BitacoraModule } from 'src/Servicios/Servicos_Desarrollo/bitacora/bitac
 import { AgenteDesService } from 'src/servicios/servicos_desarrollo/agente-des/agente-des.service';
 import { ChoferService } from 'src/Servicios/Servicos_Desarrollo/viajes/chofer/chofer.service';
 import { VehiculoService } from 'src/Servicios/Servicos_Desarrollo/viajes/vehiculo/vehiculo.service';
+import { FacturaCerradaService } from 'src/Servicios/Servicos_Desarrollo/viajes/factura_cerrada/factura_cerrada.service';
+
 @Module({
   imports:[
     TypeOrmModule.forFeature(entidadesList,'cdc'),
@@ -37,7 +39,8 @@ import { VehiculoService } from 'src/Servicios/Servicos_Desarrollo/viajes/vehicu
     ChoferService,
     VehiculoService,
     ViajesService,
-    AgenteDesService
+    AgenteDesService,
+    FacturaCerradaService
   ],
   exports:[BitacoraService],
   controllers: [CreditoCobranzaController]

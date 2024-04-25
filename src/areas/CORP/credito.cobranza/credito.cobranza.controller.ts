@@ -12,6 +12,7 @@ import CancelarViajeDTO from './DTOS/cancelar.viaje.dto';
 import CrearMotivoDTO from '../almacen.inventario/DTO/crear.motivo.dto';
 import { AgenteDesService } from 'src/servicios/servicos_desarrollo/agente-des/agente-des.service';
 import ActualizarViajeDTO from './DTOS/actualizar.viaje.dto';
+import CerrarFacturaDTO from './DTOS/cerrar.factura.dto';
 
 @UseGuards(mixinPermission('CYC'))
 @Controller('credito.cobranza')
@@ -149,6 +150,19 @@ export class CreditoCobranzaController {
     @Post('viajes/motivos/crear/:evento')
     async createMotivo(@Param('evento') evento:string, @Body() body:CrearMotivoDTO){
         return await this.cycService.setMotivo(evento, body)
+    }
+    @Get('viajes/facturas/sin_relacion')
+    async getSinRelacion(){
+        return await this.cycService.getFacturasSinRelacion();
+    }
+    @Post('viajes/factura/cerrar/:serie/:folio')
+    async cerrarFactura(@Param('serie') serie:string, @Param('folio') folio:string, @Body() body:CerrarFacturaDTO){
+        try {
+            return await this.cycService.cerrarFactura(serie,parseInt(folio),body.motivo)   
+        } catch (error) {
+            console.log(error)
+            return {mensaje:'Posiblemente algun parametro para cerrar la factura está equivocado. Intentelo de nuevo'}
+        }
     }
     //#endregion
     @Get('/agentes/todos')

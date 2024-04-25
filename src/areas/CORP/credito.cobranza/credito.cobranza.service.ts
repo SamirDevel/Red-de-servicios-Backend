@@ -19,8 +19,8 @@ import CrearMotivoDTO from '../almacen.inventario/DTO/crear.motivo.dto';
 import ActualizarViajeDTO from './DTOS/actualizar.viaje.dto';
 import { ChoferService } from 'src/Servicios/Servicos_Desarrollo/viajes/chofer/chofer.service';
 import { VehiculoService } from 'src/Servicios/Servicos_Desarrollo/viajes/vehiculo/vehiculo.service';
+import { FacturaCerradaService } from 'src/Servicios/Servicos_Desarrollo/viajes/factura_cerrada/factura_cerrada.service';
 import Viaje from 'src/entidades/entidadesDesarrollos/Viajes/viajes.entity';
-
 
 interface factura{
     serie:string
@@ -45,6 +45,7 @@ export class CreditoCobranzaService {
         private choService:ChoferService,
         private usuService:UsuariosService,
         private bitService:BitacoraService,
+        private facturaCerradaService:FacturaCerradaService,
     ){ }
     //Genera un builder de sql con los datos basicos de las facturas
     //en base al servicio de documetos
@@ -603,6 +604,13 @@ export class CreditoCobranzaService {
     }
     async closeViajes(serie:string, folio:number, datos:ViajeLlegadaDTO){
         try {
+            const viaje = await this.viaService.read({serie, folio});
+            const {detalles, empresa} = (viaje as Viaje[])[0];
+            for(const index in detalles){
+                const detalle = detalles[index];
+                const factura = await(await this.docService.getOne((empresa as 'cdc'|'cmp'),detalle['serie'],detalle['folio'])).getOne();
+                if(factura.idModelo!==4)return {mensaje:'El viaje solo puede cerrarse si contiene facturas'}
+            }
             return await this.viaService.update(serie,folio, {...datos, estatus:'COMPLETADO'}, datos.documentos);
         } catch (error) {
             console.log(error)
@@ -667,5 +675,13 @@ export class CreditoCobranzaService {
             console.log(error)
             return {mensaje:'Algo salio mal al actualizar los viajes, reportar a soporte tecnico'}
         }
+    }
+    async getFacturasSinRelacion(){
+        return await this.viaService.getSinRelacion();
+    }
+    async cerrarFactura(serie:string, folio:number, motivo:string){
+        return await this.facturaCerradaService.create({
+            serie, folio, motivo
+        })
     }
 }
