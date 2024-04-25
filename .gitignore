@@ -2,6 +2,8 @@
 src/usuarios/posts.http
 #Enviroment
 .env
+#direcciones IP
+src/whiteList.txt
 
 # compiled output
 /dist
