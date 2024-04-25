@@ -1,5 +1,5 @@
 #http
-src/usuarios/posts.http
+/src/usuarios/posts.http
 #Enviroment
 .env
 #direcciones IP
