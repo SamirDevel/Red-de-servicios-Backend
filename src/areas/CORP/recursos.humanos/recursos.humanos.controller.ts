@@ -160,7 +160,7 @@ export class RecursosHumanosController {
     }
 
     @Patch('/chofer/:codigo')
-    async updateChofer(@Param('codigo') codigo:string, @Body() body:Partial<RHChofer>){
+    async updateChofer(@Param('codigo') codigo:string, @Body() body:RHChofer){
         return await this.choService.update({...body,codigo})
     }
 

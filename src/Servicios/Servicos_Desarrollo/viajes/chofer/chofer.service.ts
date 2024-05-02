@@ -25,6 +25,7 @@ interface chofer{
     ciudad:string
     estado:string
     municipio:string
+    vigencia:Date
 }
 
 @Injectable()
@@ -53,6 +54,7 @@ export class ChoferService {
         try {
             const {idCM, idCD} = await this.getIds();
             const {idCMDom, idCDDom} = await this.getIdsDom();
+            console.log(nuevoAgenteDes);
             await this.chofRepo.save(nuevoAgenteDes);
             nuevoAgente.id=idCM
             nuevoAgente.domicilios[0].id = idCMDom
@@ -84,6 +86,7 @@ export class ChoferService {
             estatus:datos.estatus,
             codigo:datos.codigo,
             tipo:datos.tipo,
+            vigencia:datos.vigencia
         });
         return await this.insert(chofer, choferCompaq);
     }
@@ -204,6 +207,7 @@ export class ChoferService {
             .select('age.id')
             .addSelect('age.nombre')
             .addSelect('age.estatus')
+            .addSelect('age.vigencia')
             .where('age.codigo = :cod', {cod:datos.codigo})
             .getOne()
         ageCDC.nombre = ageCMP.nombre = ageDES.nombre;
@@ -216,7 +220,8 @@ export class ChoferService {
         this.switchDom(domCDC, datos);
         this.switchDom(domCMP, datos);
         if(datos.estatus!==undefined)ageDES.estatus = datos.estatus;
-        if(datos.estatus!==undefined)ageDES.tipo = datos.tipo;
+        if(datos.tipo!==undefined)ageDES.tipo = datos.tipo;
+        if(datos.vigencia!==undefined)ageDES.vigencia = datos.vigencia;
         try {
             await this.agChofRepoCDC.save(ageCDC);
             await this.domRepoCDC.save(domCDC);

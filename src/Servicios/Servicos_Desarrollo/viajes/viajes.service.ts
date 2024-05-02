@@ -32,6 +32,13 @@ interface registrable{
     responsable:string
     motivo:string
 }
+interface facturaCerradaFiltros{
+    codigoCliente:string
+    fechaI:string
+    fechaF:string
+    serie:string
+    folio:number
+}
 @Injectable()
 export class ViajesService {
     constructor(
@@ -186,6 +193,7 @@ export class ViajesService {
         })()
         return `SELECT CSERIEDOCUMENTO, CFOLIO, CTOTAL, CFECHA, (CASE 
             WHEN cli.CRFC = 'XAXX010101000' THEN cli.CTEXTOEXTRA3 ELSE cli.CRAZONSOCIAL END) AS NOMBRE
+            ,cli.CCODIGOCLIENTE
         FROM ${base}.dbo.admDocumentos doc
         LEFT JOIN ${base}.dbo.admClientes cli ON doc.CIDCLIENTEPROVEEDOR = cli.CIDCLIENTEPROVEEDOR
         LEFT JOIN ${base}.dbo.admClasificacionesValores val ON cli.CIDVALORCLASIFCLIENTE1 = val.CIDVALORCLASIFICACION
@@ -193,12 +201,13 @@ export class ViajesService {
         AND CCANCELADO = 0
         AND val.CCODIGOVALORCLASIFICACION != 'INT'`
     }
-    async getSinRelacion(){
+    async getSinRelacion(filtros:Partial<facturaCerradaFiltros>){
+        const filtrosArray = []
         const querySinRelacion = `SELECT facs.CSERIEDOCUMENTO AS serie
             ,facs.CFOLIO AS folio
             ,facs.CTOTAL AS  total
             ,facs.CFECHA AS expedicion 
-            ,facs.NOMBRE as nombre
+            ,facs.NOMBRE AS nombre
         FROM (
             ${this.querySinRelacion('cdc')}
             UNION
@@ -208,12 +217,54 @@ export class ViajesService {
         LEFT JOIN [dbo].[Facturas_Cerradas] cer ON cer.Serie = facs.CSERIEDOCUMENTO AND cer.Folio = facs.CFOLIO
         WHERE (det.Serie  IS NULL AND det.Folio IS NULL)
         AND (cer.Serie  IS NULL AND cer.Folio IS NULL)
-        AND (CFECHA <= (GETDATE()-5) AND CFECHA >= (GETDATE()-30))`
+        AND (
+            (CFECHA <= (GETDATE()-5) AND CFECHA >= (GETDATE()-30))
+            ${(()=>{
+                let cad = ''
+                const esxpedicionString = 'facs.CFECHA'
+                if(filtros.fechaI!==undefined||filtros.fechaF!==undefined){
+                    cad += `\nOR\n`
+                    if(filtros.fechaI!==undefined&&filtros.fechaF!==undefined){
+                        filtrosArray.push(filtros.fechaI)
+                        filtrosArray.push(filtros.fechaF)
+                        cad += `(${esxpedicionString} >= @0 AND ${esxpedicionString} <= @1)`
+                    }
+                    else if(filtros.fechaI!==undefined){
+                        filtrosArray.push(filtros.fechaI)
+                        cad += `${esxpedicionString} >= @0`
+                    }
+                    else{
+                        filtrosArray.push(filtros.fechaF)
+                        cad += `facs.CFECHA <= @0`
+                    }
+                }
+                cad += '\n';
+                return cad;
+            })()}
+        )
+        ${(()=>{
+            let cad = '';
+            if(filtros.codigoCliente!==undefined){
+                filtrosArray.push(filtros.codigoCliente)
+                cad += `AND facs.CCODIGOCLIENTE = @${filtrosArray.length-1}\n`
+            }
+            if(filtros.serie!==undefined){
+                filtrosArray.push(filtros.serie)
+                cad += `AND facs.CSERIEDOCUMENTO = @${filtrosArray.length-1}\n`
+            }
+            if(filtros.folio!==undefined){
+                filtrosArray.push(filtros.folio)
+                cad += `AND facs.CFOLIO = @${filtrosArray.length-1}\n`
+            }
+            return cad
+        })()}
+        `
         try {
-            return  await this.viajesRepo.query(querySinRelacion)
+            return  await this.viajesRepo.query(querySinRelacion, filtrosArray)
         } catch (error) {
             console.log(error);
             return {mensaje:'Algo salio mal al obtener las facturas sin relacion. Reportar a soporte tecnico'}
         }
     }
 }
+//AND (cer.Serie  IS NULL AND cer.Folio IS NULL)
