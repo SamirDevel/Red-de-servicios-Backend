@@ -21,6 +21,10 @@ import { ChoferService } from 'src/Servicios/Servicos_Desarrollo/viajes/chofer/c
 import { VehiculoService } from 'src/Servicios/Servicos_Desarrollo/viajes/vehiculo/vehiculo.service';
 import { FacturaCerradaService } from 'src/Servicios/Servicos_Desarrollo/viajes/factura_cerrada/factura_cerrada.service';
 import Viaje from 'src/entidades/entidadesDesarrollos/Viajes/viajes.entity';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import ConsultarFacturaSnRelacionDTO from './DTOS/consultar.factura.sin.relacion';
+import ModificarClienteDTO from './DTOS/modificar.cliente.dto';
+import FacturaCerrada from 'src/entidades/entidadesDesarrollos/Viajes/facturas.cerradas';
 
 interface factura{
     serie:string
@@ -32,7 +36,13 @@ interface diaFestivo{
     mes:number
     año:number
 }
-
+interface FacturaCerradaFiltros{
+    serie:string
+    folio:number
+    fechaI:Date
+    fechaF:Date
+    cliente:string
+}
 
 @Injectable()
 export class CreditoCobranzaService {
@@ -122,26 +132,29 @@ export class CreditoCobranzaService {
     private modificarYValidar(parametro1,parametro2,cambio:Function){
         if(parametro1!=parametro2)cambio(parametro1);
     }
-    async modificarCliente(bdname:empresa, serie:string, folio:number, body){
+    async modificarCliente(bdname:empresa, serie:string, folio:number, body:ModificarClienteDTO){
         try {
             const documento = await ((await this.getOne(bdname, serie, folio)).getOne);
             const cliente = {id:documento['idCliente'].id};
             const domicilio = {id:documento['idCliente']['domicilios'][0]['id']};
-            this.modificarYValidar(body['tel1'], domicilio['tel1'], (valor)=>domicilio['tel1']=valor);
-            this.modificarYValidar(body['tel2'], domicilio['tel2'], (valor)=>domicilio['tel2']=valor);
-            this.modificarYValidar(body['correo'], cliente['mail1'], (valor)=>cliente['mail1']=valor);
-            this.modificarYValidar(body['contrarecivo'], cliente['txt4'], (valor)=>cliente['txt4']=valor);
-            this.modificarYValidar(body['formaPago'], cliente['txt5'], (valor)=>cliente['txt5']=valor);
-            this.modificarYValidar(body['clasificacion'], bdname==='cdc'?cliente['clasificacionCliente2']:cliente['clasificacionCliente4'], (valor)=>{
+            //console.log(body);
+            this.modificarYValidar(body.tel1, domicilio['tel1'], (valor)=>domicilio['tel1']=valor);
+            this.modificarYValidar(body.tel2, domicilio['tel2'], (valor)=>domicilio['tel2']=valor);
+            this.modificarYValidar(body.correo, cliente['mail1'], (valor)=>cliente['mail1']=valor);
+            this.modificarYValidar(body.contrarecivo, cliente['txt4'], (valor)=>cliente['txt4']=valor);
+            this.modificarYValidar(body.formaPago, cliente['txt5'], (valor)=>cliente['txt5']=valor);
+            this.modificarYValidar(body.diasCredito, cliente['diasCreditoCliente'], (valor)=>cliente['diasCreditoCliente']=valor);
+            this.modificarYValidar(body.limiteCredito, cliente['limiteCreditoCliente'], (valor)=>cliente['limiteCreditoCliente']=valor);
+            this.modificarYValidar(body.clasificacion, bdname==='cdc'?cliente['clasificacionCliente2']:cliente['clasificacionCliente4'], (valor)=>{
                 if(bdname==='cdc')
                     cliente['clasificacionCliente2']=valor;
                 else cliente['clasificacionCliente4']=valor;
             });
-            this.modificarYValidar(body['activo']==true?1:0, cliente['estatus'], (valor)=>cliente['estatus']=valor);
+            this.modificarYValidar(body.activo==true?1:0, cliente['estatus'], (valor)=>cliente['estatus']=valor);
             const msj1 = await this.extService.modificar(bdname,cliente);
             const msj2 = await this.domService.modificar(bdname,domicilio);
-            this.comentarFactura({serie,folio:folio.toString()},body['observacion'])
-            return {mensaje:`${msj1['mensaje']}\n${msj2['mensaje']}`}
+            this.comentarFactura({serie,folio:folio.toString()},body.observacion)
+            return `${msj1['mensaje']}\n${msj2['mensaje']}`
         } catch (error) {
             return {mensaje:error}
         }
@@ -617,7 +630,6 @@ export class CreditoCobranzaService {
             return {mensaje:'Algo salio mal al consultar los viajes, reportar a soporte tecnico'}
         }
     }
-
     async getMotivos(evento:string){
         try {
             return await this.bitService.getMotivos('Viaje', evento)
@@ -676,12 +688,33 @@ export class CreditoCobranzaService {
             return {mensaje:'Algo salio mal al actualizar los viajes, reportar a soporte tecnico'}
         }
     }
-    async getFacturasSinRelacion(){
-        return await this.viaService.getSinRelacion();
+    async getFacturasSinRelacion(query: ConsultarFacturaSnRelacionDTO){
+        return await this.viaService.getSinRelacion({
+            ...query,
+            codigoCliente:query.cliente
+        });
     }
     async cerrarFactura(serie:string, folio:number, motivo:string){
-        return await this.facturaCerradaService.create({
-            serie, folio, motivo
+        const original = (await this.facturaCerradaService.read({serie, folio}))[0]
+        if((original instanceof FacturaCerrada)===false){
+            return await this.facturaCerradaService.create({
+                serie, folio, motivo
+            })
+        }else return await this.facturaCerradaService.update(serie, folio, motivo);
+    }
+    async getFacturasCerradas(filtros:Partial<FacturaCerradaFiltros>){
+        const result = await  this.facturaCerradaService.read(filtros);
+        if(result['mensaje']!==undefined)return result;
+        else return (result as FacturaCerrada[]).filter(factura=>{
+            if(filtros.fechaI!==undefined)return factura.fecha>=filtros.fechaI
+            if(filtros.fechaF!==undefined)return factura.fecha<=filtros.fechaF
+            if(filtros.cliente!==undefined)return factura.codigo===filtros.cliente
+            return true
         })
     }
+    /*@Cron(CronExpression.EVERY_10_SECONDS)
+    private async notificar(){
+        console.log('programada')
+        console.log((new Date()).getUTCMinutes());
+    }*/
 }

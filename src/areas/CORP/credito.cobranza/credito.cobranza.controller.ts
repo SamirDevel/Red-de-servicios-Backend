@@ -13,6 +13,9 @@ import CrearMotivoDTO from '../almacen.inventario/DTO/crear.motivo.dto';
 import { AgenteDesService } from 'src/servicios/servicos_desarrollo/agente-des/agente-des.service';
 import ActualizarViajeDTO from './DTOS/actualizar.viaje.dto';
 import CerrarFacturaDTO from './DTOS/cerrar.factura.dto';
+import ConsultarFacturaSnRelacionDTO from './DTOS/consultar.factura.sin.relacion';
+import ModificarClienteDTO from './DTOS/modificar.cliente.dto';
+import ConsultarFacturaSnRelacionCerradasDTO from './DTOS/consultar.factiras.sin.relacion.cerradas.dto';
 
 @UseGuards(mixinPermission('CYC'))
 @Controller('credito.cobranza')
@@ -123,7 +126,7 @@ export class CreditoCobranzaController {
 
     @UseInterceptors(CorpOneInterceptor)
     @Post('/modificar/:empresa/:serie/:folio')
-    async modificarCliente(@Body() body:any, @Param('empresa') empresa:empresa, @Param('serie') serie:string, @Param('folio') folio:number){
+    async modificarCliente(@Body() body:ModificarClienteDTO, @Param('empresa') empresa:empresa, @Param('serie') serie:string, @Param('folio') folio:number){
         return await this.cycService.modificarCliente(empresa, serie,folio, body);   
     }
     //#region Viajes
@@ -152,8 +155,12 @@ export class CreditoCobranzaController {
         return await this.cycService.setMotivo(evento, body)
     }
     @Get('viajes/facturas/sin_relacion')
-    async getSinRelacion(){
-        return await this.cycService.getFacturasSinRelacion();
+    async getSinRelacion(@Query() query:ConsultarFacturaSnRelacionDTO){
+        return await this.cycService.getFacturasSinRelacion(query);
+    }
+    @Get('viajes/facturas/sin_relacion/cerradas')
+    async getSinRelacionCerradas(@Query() query:ConsultarFacturaSnRelacionCerradasDTO){
+        return await this.cycService.getFacturasCerradas(query);
     }
     @Post('viajes/factura/cerrar/:serie/:folio')
     async cerrarFactura(@Param('serie') serie:string, @Param('folio') folio:string, @Body() body:CerrarFacturaDTO){

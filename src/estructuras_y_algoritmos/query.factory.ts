@@ -98,7 +98,6 @@ export default class QueryFactory<T>{
         .addSelect(`${owner}.pendiente`)
         .addSelect(`${owner}.atraso`)
         .addSelect(`${owner}.unidades`)
-        .addSelect(`${owner}.idModelo`)
         this.createColumna('Documento','cancelado',true)({alias:'cancelado',operador:undefined,value:0,opcional:false})
         //.andWhere(`${owner}.cancelado = :cancelado`,{cancelado:0})
         return this;
@@ -132,6 +131,7 @@ export default class QueryFactory<T>{
         .addSelect(`${owner}.estatus`)
         .addSelect(`${owner}.diasCreditoCliente`)
         .addSelect(`${owner}.clasificacionClienteReal`)
+        .addSelect(`${owner}.limiteCreditoCliente`)
         return this
     }
 

@@ -1,6 +1,5 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { Like } from 'typeorm';
 
 export function validatorBool(cadena:string, objeto:string){
     let Flag:null|boolean=null;
