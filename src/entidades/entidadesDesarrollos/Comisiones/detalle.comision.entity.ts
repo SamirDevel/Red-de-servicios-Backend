@@ -75,28 +75,39 @@ export default class DetalleComision{
                 THEN cli.CTEXTOEXTRA3
             ELSE cli.CRAZONSOCIAL
         END`
-        const join =`LEFT JOIN ${process.env.DB_NAME_CDC}.dbo.admClientes cli
-        ON doc.CIDCLIENTEPROVEEDOR = cli.CIDCLIENTEPROVEEDOR`
+        function join(dbname:'cdc'|'cmp'){
+            const db = (()=>{
+                if(dbname==='cdc')return process.env.DB_NAME_CDC;
+                if(dbname==='cmp')return process.env.DB_NAME_CMP;
+            })();
+           return `LEFT JOIN ${db}.dbo.admClientes cli
+            ON doc.CIDCLIENTEPROVEEDOR = cli.CIDCLIENTEPROVEEDOR`
+        }
         return `
         CASE
-            WHEN ${alias}.Serie IN (SELECT [CSERIEPOROMISION]
+            WHEN ${alias}.Serie IN (
+                SELECT [CSERIEPOROMISION]
                     FROM ${process.env.DB_NAME_CDC}.dbo.admConceptos
                     WHERE [CUSAREFERENCIA] = 4
-                    AND CIDDOCUMENTODE = 4) THEN
-                (SELECT TOP(1) ${columna}
+                    AND CIDDOCUMENTODE = 4
+            )THEN (
+                SELECT TOP(1) ${columna}
                 FROM ${process.env.DB_NAME_CDC}.dbo.admDocumentos doc
-                ${join}
+                ${join('cdc')}
                 WHERE doc.CSERIEDOCUMENTO = ${alias}.Serie
-                AND doc.CFOLIO = ${alias}.Folio)
-            WHEN ${alias}.Serie IN (SELECT [CSERIEPOROMISION]
+                AND doc.CFOLIO = ${alias}.Folio
+            )WHEN ${alias}.Serie IN (
+                SELECT [CSERIEPOROMISION]
                     FROM ${process.env.DB_NAME_CMP}.dbo.admConceptos
                     WHERE [CUSAREFERENCIA] = 4
-                    AND CIDDOCUMENTODE = 4) THEN
-                (SELECT TOP(1) ${columna}
+                    AND CIDDOCUMENTODE = 4
+            )THEN(
+                SELECT TOP(1) ${columna}
                 FROM ${process.env.DB_NAME_CMP}.dbo.admDocumentos doc
-                ${join}
+                ${join('cmp')}
                 WHERE doc.CSERIEDOCUMENTO = ${alias}.Serie
-                AND doc.CFOLIO = ${alias}.Folio)
+                AND doc.CFOLIO = ${alias}.Folio
+            )
         END`
     }
 
