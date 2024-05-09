@@ -5,6 +5,7 @@ import Viaje from 'src/entidades/entidadesDesarrollos/Viajes/viajes.entity';
 import DetalleViaje from 'src/entidades/entidadesDesarrollos/Viajes/detalleViaje.entity';
 import Serie from 'src/entidades/entidadesDesarrollos/Viajes/serie.entity';
 import { BitacoraService } from '../bitacora/bitacora.service';
+import RepositoryService from '../../service.repository.interface';
 
 interface filtros{
     serie:string
@@ -40,7 +41,7 @@ interface facturaCerradaFiltros{
     folio:number
 }
 @Injectable()
-export class ViajesService {
+export class ViajesService implements RepositoryService{
     constructor(
         private bitService:BitacoraService,
         @InjectRepository(Viaje, 'viajes') private viajesRepo:Repository<Viaje>,

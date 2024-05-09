@@ -6,10 +6,8 @@ import {
     IsBoolean, 
     IsPhoneNumber,
     isNotEmpty,
-    isEmpty,
-    IsNotEmpty,
     ValidateIf,
-    IsNumberString
+    IsNumberString,
 } from "class-validator";
 
 export default class ModificarClienteDTO{
@@ -39,7 +37,7 @@ export default class ModificarClienteDTO{
     @ValidateIf((value:ModificarClienteDTO)=>{
         return isNotEmpty(value.contrarecivo)
     })
-    @IsNumberString()
+    @IsString()
     contrarecivo:number
 
     @IsOptional()
