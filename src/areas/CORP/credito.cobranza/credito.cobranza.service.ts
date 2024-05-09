@@ -665,15 +665,15 @@ export class CreditoCobranzaService {
             if(datos.kmFinal<=viaje.kmInicial)
                 return {mensaje:'La el kilometraje final no puede ser menor a la de inicio'}
             if(chofer!==undefined){
-                if(this.choService.onViaje(datos.chofer))
+                if(await this.choService.onViaje(datos.chofer))
                     return {mensaje:'El chofer ya se encuentra en viajes pendientes'};
             }
             if(vehiculo!==undefined){
-                if(this.vehService.onViaje(datos.vehiculo))
+                if(await this.vehService.onViaje(datos.vehiculo))
                     return {mensaje:'El vehiculo ya se encuentra en viajes pendientes'};
             }
             if(auxiliar!==undefined){
-                if(this.choService.onViaje(datos.auxiliar))
+                if(await this.choService.onViaje(datos.auxiliar))
                     return {mensaje:'El auxiliar ya se encuentra en viajes pendientes'};
             }
             const obj = {
