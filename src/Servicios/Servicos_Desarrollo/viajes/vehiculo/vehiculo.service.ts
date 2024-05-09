@@ -202,7 +202,7 @@ export class VehiculoService {
             .where('vjs.estatus = :es',{es:'PENDIENTE'})
             .andWhere('veh.codigo = :cod', {cod})
             .getRawOne();
-        return (viajes['pendiente']>2);
+        return (viajes['pendientes']>2);
     }
 
 }

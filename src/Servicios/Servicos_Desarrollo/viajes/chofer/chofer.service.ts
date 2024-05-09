@@ -242,7 +242,8 @@ export class ChoferService {
             .where('vjs.estatus = :es',{es:'PENDIENTE'})
             .andWhere('chof.codigo = :cod', {cod})
             .getRawOne();
-        return (viajes['pendiente']>2);
+        //console.log(viajes)
+        return (viajes['pendientes']>2);
     }
 
 }
