@@ -173,7 +173,7 @@ export class ViajesService {
             }
             //console.log('viaje');
             //console.log(viaje);
-            //await this.viajesRepo.save(viaje);
+            await this.viajesRepo.save(viaje);
             return 'Viaje actualizado con exito';
         } catch (error) {
             console.log(error);

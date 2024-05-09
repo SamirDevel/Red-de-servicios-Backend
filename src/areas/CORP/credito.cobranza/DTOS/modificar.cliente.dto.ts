@@ -29,6 +29,9 @@ export default class ModificarClienteDTO{
     tel2:number
 
     @IsOptional()
+    @ValidateIf((value:ModificarClienteDTO)=>{
+        return isNotEmpty(value.correo)
+    })
     @IsEmail()
     correo:string
 

@@ -35,11 +35,11 @@ export class AlmacenInventarioController {
     }
 
     @Get('/consultar/:ruta/:empresa/:fechaI/:fechaF')
-    consultarPicking(@Param('ruta') ruta:string, @Param('empresa') empresa:string, @Param('fechaI') fechaI:string, @Param('fechaF') fechaF:string){
+    async consultarPicking(@Param('ruta') ruta:string, @Param('empresa') empresa:string, @Param('fechaI') fechaI:string, @Param('fechaF') fechaF:string){
         if(ruta==='NA')ruta = undefined
         if(fechaI==='NA')fechaI = undefined
         if(fechaF==='NA')fechaF = undefined
         if(empresa==='NA')empresa = undefined
-        return this.picService.read(ruta, fechaI, fechaF, empresa)
+        return await this.picService.read(ruta, fechaI, fechaF, empresa)
     }
 }
