@@ -224,7 +224,8 @@
   {
     "serie": "FG401",
     "folio": "8636",
-    "comentario": "pendiente lo va a pagar luis fernando correa chofer"
+    "comentario": "pendiente lo va a pagar luis fernando correa chofer",
+    "name": "FG401-8636"
   },
   {
     "serie": "FG401",
@@ -315,5 +316,88 @@
     "folio": "7994",
     "comentario": "deposito hector el 9 de mayo",
     "name": "FG401-7994"
+  },
+  {
+    "serie": "FG402",
+    "folio": "6073",
+    "comentario": "se le ha cobrado y dice paga y no lo hace",
+    "name": "FG402-6073"
+  },
+  {
+    "serie": "FG401",
+    "folio": "5505",
+    "comentario": "oendiente devolucion",
+    "name": "FG401-5505"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8018",
+    "comentario": "cheque",
+    "name": "FG401-8018"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8411",
+    "comentario": "CHEQUE",
+    "name": "FG401-8411"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8449",
+    "comentario": "CHEQUE",
+    "name": "FG401-8449"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8130",
+    "comentario": "cheque lo trae maycol",
+    "name": "FG401-8130"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8064",
+    "comentario": "cheque",
+    "name": "FG401-8064"
+  },
+  {
+    "serie": "FG401",
+    "folio": "5211",
+    "comentario": "dio cheque no paso y se le han estado haciendo constantes llamada y nopaga",
+    "name": "FG401-5211"
+  },
+  {
+    "serie": "FG401",
+    "folio": "6700",
+    "comentario": "pendiente aplicacion anticipo",
+    "name": "FG401-6700"
+  },
+  {
+    "serie": "FG401",
+    "folio": "7627",
+    "comentario": "esta dando abonos",
+    "name": "FG401-7627"
+  },
+  {
+    "serie": "FG402",
+    "folio": "5635",
+    "comentario": "ESTA DESAPARECDA",
+    "name": "FG402-5635"
+  },
+  {
+    "serie": "FG401",
+    "folio": "7262",
+    "comentario": "FRAUDE",
+    "name": "FG401-7262"
+  },
+  {
+    "serie": "FG401",
+    "folio": "7500",
+    "comentario": "VALE VA A REVISAR LA DIFERENCIA",
+    "name": "FG401-7500"
+  },
+  {
+    "serie": "FG401",
+    "folio": "7828",
+    "comentario": "no hay casi ventas queda el pago 13- 17 de mayo"
   }
 ]

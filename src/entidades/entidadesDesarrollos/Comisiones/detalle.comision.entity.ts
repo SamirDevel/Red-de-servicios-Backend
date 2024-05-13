@@ -20,6 +20,9 @@ export default class DetalleComision{
     @Column({name:'Vencimiento'})
     vencimientoComision:Date
 
+    @Column('decimal', {name:'Cobranza_Inicial', scale:2, precision:12})
+    cobranza:number
+
     @Column('decimal', {name:'A_Tiempo', scale:2, precision:12})
     aTiempo:number
 

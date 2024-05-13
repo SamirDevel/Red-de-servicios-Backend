@@ -10,6 +10,21 @@ interface datosObligatorios{
     agente?:string|string[]
     rutas?:string
 }
+export interface datosFactura{
+    serie:string
+    folio:number
+    total:number
+    expedicion:Date
+    nombre:string
+    pendienteInicio:number
+    cobrado:number
+    cancelado:number
+    adelantado:number
+    aTiempo:number
+    fueraTiempo:number
+    pendienteFinal:number
+    vencimientoReal:Date
+}
 
 @Injectable()
 export class VentasService {
@@ -33,7 +48,7 @@ export class VentasService {
         query.andWhere(`((${this.calculoVencimientoString()} < :fechaI))`);
     }
     async cobranzaTotal(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.cobranzaTotalWhere(query);
         query.having(`(
                 (${this.pendienteQueryString()}) > 0
@@ -65,7 +80,7 @@ export class VentasService {
     }
 
     async vencimientos(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.cobranzaTotalWhere(query);
         query.having(`((${this.pendienteQueryString()}) > 0)`)
         return {VENCIMIENTOS_PERIODO:await this.secuence(query,'vencimientos',filtros.list,(doc:Documento, cont:Object)=>{
@@ -73,7 +88,7 @@ export class VentasService {
         })}
     }
     async adelantos(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.cobranzaTotalWhere(query);
         query.having(`((${this.adelantadoQueryString()}) > 0)`)
         return {ADELANTOS_PERIODO:await this.secuence(query,'adelantos',filtros.list,(doc:Documento, cont:Object)=>{
@@ -81,7 +96,7 @@ export class VentasService {
         })}
     }
     async cobrado(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.cobranzaTotalWhere(query);
         query.having(`((${this.cobradoQueryString()}) > 0)`)
          const result = await this.secuence(query,'los importes cobrados',filtros.list,(doc:Documento, cont:Object)=>{
@@ -92,7 +107,7 @@ export class VentasService {
         else return {cobradoPeriodo:result}
     }
     async aTiempo(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.cobranzaTotalWhere(query);
         query.having(`((${this.aTiempoQueryString()}) > 0)`)
         const result = await this.secuence(query,'los importes cobrados a tiempo',filtros.list,(doc:Documento, cont:Object)=>{
@@ -103,7 +118,7 @@ export class VentasService {
         else return {aTiempoPeriodo:result}
     }
     async fueraTiempo(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.cobranzaTotalWhere(query);
         query.having(`((${this.fueraTiempoQueryString()}) > 0)`)
         const result = await this.secuence(query,'los importes cobrados fuera de tiempo',filtros.list,(doc:Documento, cont:Object)=>{
@@ -114,7 +129,7 @@ export class VentasService {
         else return {fueraTiempoPeriodo:result}
     }
     async pendiente(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.cobranzaTotalWhere(query);
         query.having(`((${this.pendienteFinQueryString()}) > 0)`)
         const result = await this.secuence(query,'los importes pendientes',filtros.list,(doc:Documento, cont:Object)=>{
@@ -126,7 +141,7 @@ export class VentasService {
     }
     //Cartera Vencida
     async CarteraVencida(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.carteraVencidaWhere(query);
         query.having(`((${this.deudaQueryString()}) > 0)`)
         //let deudaInicial = 0;
@@ -152,7 +167,7 @@ export class VentasService {
         };
     }
     async recuperado(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.carteraVencidaWhere(query);
         query.having(`((${this.cobradoQueryString()}) > 0)`)
         const result = await this.secuence(query,'los importes recuperados de la cartera vencida',filtros.list,(doc:Documento, cont:Object)=>{
@@ -163,7 +178,7 @@ export class VentasService {
         else return {recuperado:result}
     }
     async cancelado(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.carteraVencidaWhere(query);
         query.having(`((${this.cobradoQueryString()}) > 0)`)
         const result = await this.secuence(query,'los importes cancelados de la cartera vencida',filtros.list,(doc:Documento, cont:Object)=>{
@@ -174,7 +189,7 @@ export class VentasService {
         else return {cancelado:result}
     }
     async deudaFinal(bdname:string, filtros:datosObligatorios){
-        const query = this.queryBase(bdname, filtros);
+        const query = await this.queryBase(bdname, filtros);
         this.carteraVencidaWhere(query);
         query.having(`((${this.pendienteFinQueryString()}) > 0)`)
         const result = await this.secuence(query,'la deuda pendiente del periodo',filtros.list,(doc:Documento, cont:Object)=>{
@@ -269,7 +284,7 @@ export class VentasService {
         ELSE 0
         END`
     }
-    queryBase(bdname:string, filtros:datosObligatorios){
+    async queryBase(bdname:string, filtros:datosObligatorios){
         const repo = this.seleccionarBase(bdname);
         filtros.fechaF.setUTCHours(23, 59, 59, 999);
         let concepto:number = null;
@@ -352,6 +367,10 @@ export class VentasService {
             .addGroupBy('cli.rfc')
             .addGroupBy('cli.txt3')
         //console.log(query.getQuery());
+        /*const [str, params] = query.getQueryAndParameters();
+        const result = await repo.query(`SELECT SUM(pendienteInicio)
+        FROM (${str}) sq`,params)
+        console.log(result)*/
         return query;
     }
     private async exec(lista:Documento[]){

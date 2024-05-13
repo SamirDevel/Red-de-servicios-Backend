@@ -1,5 +1,5 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany, VirtualColumn
-    , AfterLoad, OneToOne, JoinColumn} from 'typeorm';
+    , AfterLoad, ManyToOne, JoinColumn} from 'typeorm';
 import DetalleComision from './detalle.comision.entity';
 
 @Entity({name:'Registro_Comision'})
@@ -37,6 +37,9 @@ export default class RegistroComision{
     @Column({name:'Fecha_Final'})
     final:Date
 
+    @Column('decimal',{name:'Penalizacion', scale:2, precision:12})
+    penalizacion:number
+
     @VirtualColumn({query:(alias)=>`SELECT  GRUPO
     FROM Cuentas.dbo.Agentes ag
     WHERE ag.Codigo = ${alias}.Codigo_Agente`})
@@ -49,6 +52,7 @@ export default class RegistroComision{
     
     comision:number
     faltante:number
+
 
     @OneToMany(()=>DetalleComision, (det)=>det.idRegistro,{cascade:true})
     detalles:DetalleComision[]    

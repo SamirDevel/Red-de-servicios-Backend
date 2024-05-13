@@ -1,0 +1,12 @@
+[
+  {
+    "id": 0,
+    "motivo": "Penalización no aplicada",
+    "valor": 0
+  },
+  {
+    "id": 1,
+    "motivo": "Meta de cobranza no lograda",
+    "valor": 0.1
+  }
+]

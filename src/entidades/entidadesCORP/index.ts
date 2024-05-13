@@ -7,7 +7,6 @@ import AsocCargosAbonos from "./asociacion.cargos.abonos";
 import ClasificacionesValores from "./clasificaciones.valores";
 import Producto from "./productos.entity";
 //Entidades con herencia
-import DocumentoComision from "src/entidades/entidadesCORP/Extendidas/DocumentoComision.entity";
 import AgenteChofer from "src/entidades/entidadesCORP/Extendidas/Agente.chofer.entity";
 import DomicilioChofer from "src/entidades/entidadesCORP/Extendidas/Domicilio.chofer.entity";
 import ProductoPicking from "src/entidades/entidadesCORP/Extendidas/Producto.picking.entity";
@@ -17,8 +16,8 @@ const entidadesList:any = [
     Externo, Agentes, Documento, Domicilios, Movimiento, AsocCargosAbonos
     ,ClasificacionesValores, Producto 
     //Entidades con herencia
-    ,DocumentoComision, AgenteChofer,
-    DomicilioChofer, ProductoPicking,
+    ,AgenteChofer
+    ,DomicilioChofer, ProductoPicking,
     //Vistas
 ];
 
