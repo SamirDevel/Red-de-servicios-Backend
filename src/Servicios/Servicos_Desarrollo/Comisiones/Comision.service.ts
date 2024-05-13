@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository, SelectQueryBuilder} from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import DocumentoComision from '../../../entidades/entidadesCORP/Extendidas/DocumentoComision.entity';
+import { datosFactura } from '../ventas/ventas.service';
 import AgentesDes from 'src/entidades/entidadesDesarrollos/Cuentas/agentes.des.entity';
 import ListaCorp from 'src/estructuras_y_algoritmos/lista.corp';
 import RegistroComision from 'src/entidades/entidadesDesarrollos/Comisiones/registro.comision.entity';
@@ -28,7 +28,10 @@ interface bonoChofer{
     nombre:string
     valor:number
 }
-
+interface penalizacion{
+    motivo:string
+    valor:number
+}
 @Injectable()
 export class ComisionService{
     private raiz:string
@@ -48,7 +51,20 @@ export class ComisionService{
 
     async  getList(fechaI:string, fechaF:string, tipo:number, agente?:string){
         const respuesta = this.regRepoDes.createQueryBuilder('regs')
-            .select()
+            .select('regs.id')
+            .addSelect('regs.agente')
+            .addSelect('regs.cobranza')
+            .addSelect('regs.aTiempo')
+            .addSelect('regs.fueraTiempo')
+            .addSelect('regs.porcentaje')
+            .addSelect('regs.descuentos')
+            .addSelect('regs.anticipo')
+            .addSelect('regs.inicio')
+            .addSelect('regs.final')
+            .addSelect('regs.tipo')
+            .addSelect('regs.nombre')
+            .addSelect('regs.esquema')
+            .addSelect('regs.penalizacion')
             .where('regs.inicio = :fechaI AND regs.final = :fechaF',{fechaI,fechaF})
         if(agente!==undefined){
             respuesta.andWhere('regs.agente = :agente', {agente});
@@ -72,6 +88,7 @@ export class ComisionService{
             .addSelect('dets.aTiempo')
             .addSelect('dets.fueraTiempo')
             .addSelect('dets.nombre')
+            .addSelect('dets.cobranza')
             .leftJoin('regs.detalles', 'dets')
             .where('regs.inicio = :fechaI AND regs.final = :fechaF',{fechaI,fechaF})
             .andWhere('regs.agente = :codigo', {codigo})
@@ -125,7 +142,7 @@ export class ComisionService{
                 }
                 const cdc = await this.ventasService.cobranzaTotal('cdc', filtros)
                 const cmp = await this.ventasService.cobranzaTotal('cmp', filtros)
-                nuevo.setDocumentos(cdc as DocumentoComision[], cmp as DocumentoComision[])
+                nuevo.setDocumentos(cdc as any[], cmp as any[])
             }
             return nuevo
         } catch (error) {
@@ -134,7 +151,7 @@ export class ComisionService{
         }   
     }
 
-    private setDetalles(lista:DocumentoComision[]){
+    private setDetalles(lista:datosFactura[]){
         const result:DetalleComision[] = new Array();
         const end = lista.length;
         for(let i=0; i<end; i++){
@@ -145,12 +162,13 @@ export class ComisionService{
             nuevo.aTiempo = obj.aTiempo,
             nuevo.fueraTiempo = obj.fueraTiempo
             nuevo.vencimientoComision = obj.vencimientoReal;
+            nuevo.cobranza = obj.pendienteInicio + obj.adelantado
             result.push(nuevo);
         }
         return result
     }
 
-    async saveRgistros(fechaI:string, fechaF:string, arreglo:RegistroComision[]){
+    async saveRgistros(fechaI:string, fechaF:string, arreglo:Partial<RegistroComision>[]){
         const end = arreglo.length;
         const errores= new Array()
         for(let i=0; i<end; i++){
@@ -174,7 +192,9 @@ export class ComisionService{
             nuevo.anticipo = parseFloat(registro.anticipo.toFixed(2))
             nuevo.inicio = new Date(`${fechaI}T00:00:00`)
             nuevo.final = new Date(`${fechaF}T00:00:00`)
+            nuevo.penalizacion = registro.penalizacion;
             try {
+                //console.log(nuevo)
                 await this.regRepoDes.save(nuevo)
                 //const codigos = [`'${agente.codigo}'`, ...agente.dependientes.map(dep=>`'${dep.codDependiente.codigo}'`)]
                 const codigos = this.getCodigos(agente, registro['grupo'])
@@ -186,8 +206,8 @@ export class ComisionService{
                 }
                 const cdc = await this.ventasService.cobranzaTotal('cdc', filtros)
                 const cmp = await this.ventasService.cobranzaTotal('cmp', filtros)
-                const detalles = this.setDetalles(cdc as DocumentoComision[])
-                    .concat(this.setDetalles(cmp as DocumentoComision[]));
+                const detalles = this.setDetalles(cdc as any[])
+                    .concat(this.setDetalles(cmp as any[]));
                 detalles.forEach(async detalle=>{
                     try {
                         detalle.grupo = registro['grupo'];
@@ -217,6 +237,7 @@ export class ComisionService{
             }
         }
         console.log(errores);
+        if(errores.length>0)return{mensaje:'Ha currido un error al guardar los registros. Reportar a soporte tecnico'}
         return 'Registros guardados con exito'
     }
     private async getVentasAmbas({agente, fechaI, fechaF}){
@@ -227,7 +248,8 @@ export class ComisionService{
         const respuestaCDC = await this.ventasService.cobranzaTotal('cdc', {agente, fechaI, fechaF, list:'false'});
         const respuestaCMP = await this.ventasService.cobranzaTotal('cmp', {agente, fechaI, fechaF, list:'false'});
         const obj = {
-            cobradoPeriodo: fns.fixed(respuestaCDC['cobradoPeriodo'] + respuestaCMP['cobradoPeriodo']),
+            cobranzaPeriodo:fns.fixed(respuestaCDC['totalPeriodo'] + respuestaCMP['totalPeriodo']), 
+            //cobradoPeriodo: fns.fixed(respuestaCDC['cobradoPeriodo'] + respuestaCMP['cobradoPeriodo']),
             aTiempoPeriodo: fns.fixed(respuestaCDC['aTiempoPeriodo'] + respuestaCMP['aTiempoPeriodo']),
             fueraTiempoPeriodo: fns.fixed(respuestaCDC['fueraTiempoPeriodo'] + respuestaCMP['fueraTiempoPeriodo']),
         }
@@ -268,7 +290,8 @@ export class ComisionService{
                         const dep = rel.codDependiente;
                         const nombre = dep.nombre;
                         const respuesta = await this.getVentasAmbas({...obj, agente:nombre});
-                        dep.ventas = respuesta['cobradoPeriodo'];
+                        //dep.ventas = respuesta['cobradoPeriodo'];
+                        dep.cobranza = respuesta['cobranzaPeriodo']
                         dep.ventasATiempo = respuesta['aTiempoPeriodo'];
                         dep.ventasFueraTiempo = respuesta['fueraTiempoPeriodo'];   
                         return rel;
@@ -276,7 +299,8 @@ export class ComisionService{
                     agentes.push({...dato})
                 }else if(dato.grupo===2){
                     const respuesta = await this.getVentasAmbas({...obj, agente:dato.nombre});
-                    dato.ventas = respuesta['cobradoPeriodo']
+                    //dato.ventas = respuesta['cobradoPeriodo']
+                    dato.cobranza = respuesta['cobranzaPeriodo']
                     dato.ventasATiempo = respuesta['aTiempoPeriodo']
                     dato.ventasFueraTiempo = respuesta['fueraTiempoPeriodo']
                     agentes.push({...dato})                
@@ -517,12 +541,36 @@ export class ComisionService{
         return fns.setApendices(`${this.raiz}/bonos.choferes`, nuevosBonos)
     }   
     //#endregion
+    //#region penalizaciones
+    async setPenalizaciones(nuevo:penalizacion[]){
+        return fns.setApendices(`${this.raiz}/penalizaciones`, nuevo)
+    }
+    async getPenalizacion(id?:number){
+        try {
+            const result = fns.getApendices(`${this.raiz}/penalizaciones`)
+            //console.log(query)
+            return result;
+        } catch (error) {
+            console.log(error)
+            return {mensaje:'Algo salio mal al leer la nueva penalizacion. Reportar a soporte técnico'}
+        }
+    }
+    getMeta(){
+        const meta = fns.getApendices(`${this.raiz}/meta`);
+        //console.log(meta)
+        return meta[0]
+    }
+    setMeta(meta:number){
+        fns.setApendices(`${this.raiz}/meta`, [{meta}])
+        return 'Meta de cobranza actualizada con exito'
+    }
+    //#endregion
 
 }
 
 
 class AuxiliarComision{
-    public documentos:ListaCorp<DocumentoComision>|ListaCorp<DetalleComision>
+    public documentos:ListaCorp<datosFactura>|ListaCorp<DetalleComision>
     public deps:AgentesDes[]
     public saved:boolean
     constructor(
@@ -534,9 +582,9 @@ class AuxiliarComision{
         this.deps = [];
     }
 
-    setDocumentos(cdc:DocumentoComision[], cmp:DocumentoComision[]){
+    setDocumentos(cdc:datosFactura[], cmp:datosFactura[]){
         this.documentos = new ListaCorp(cdc)
-        this.documentos.fusion(cmp,(doc1:DocumentoComision, doc2:DocumentoComision)=>false)
+        this.documentos.fusion(cmp,(doc1:datosFactura, doc2:datosFactura)=>false)
     }
 
     setDocsDets(lista:DetalleComision[]){

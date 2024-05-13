@@ -16,6 +16,9 @@ import RHVehiculo from './DTOS/rh.vehiculo.dto';
 import { EsquemasVehiculoService } from 'src/Servicios/Servicos_Desarrollo/viajes/vehiculo/esquemas.vehiculo/esquemas.vehiculo.service';
 import BonoChoferDTO from './DTOS/bono.chofer.dto';
 import ComisionChoferDTO from './DTOS/registro.comision.chofer.dto';
+import MetaCobranzaDTO from './DTOS/meta.cobranza.dto';
+import GuardarComisionDTO from './DTOS/guardar.comision.dto';
+import PenalizacionVentasDTO from './DTOS/penalizacion.comision.ventas.dto';
 
 @UseGuards(mixinPermission('RH'))
 @Controller('recursos.humanos')
@@ -96,6 +99,22 @@ export class RecursosHumanosController {
     setBonosChofer(@Body() body:BonoChoferDTO[]){
         return this.comisionService.setBonos(body)
     }
+    @Get('penalizaciones')
+    async getPenalizaciones(){
+        return await this.comisionService.getPenalizacion()
+    }
+    @Post('penalizaciones')
+    setPenalizaciones(@Body() body:PenalizacionVentasDTO[]){
+        return this.comisionService.setPenalizaciones(body)
+    }
+    @Get('/meta/ventas')
+    getMeta(){
+        return this.comisionService.getMeta()
+    }
+    @Post('/meta/ventas')
+    setMeta(@Body() body:MetaCobranzaDTO){
+        return this.comisionService.setMeta(body.meta)
+    }
 
     //#region  comisiones
     @Get('/comisiones/ventas/:fechaI/:fechaF/:tipo')
@@ -109,7 +128,7 @@ export class RecursosHumanosController {
     }
 
     @Post('/comisiones/ventas/:fechaI/:fechaF')
-    async setComisionesPagadas(@Param('fechaI') fechaI:string, @Param('fechaF') fechaF:string, @Body() body:any){
+    async setComisionesPagadas(@Param('fechaI') fechaI:string, @Param('fechaF') fechaF:string, @Body() body:GuardarComisionDTO[]){
         return await this.comisionService.saveRgistros(fechaI, fechaF, body)
     }
 
