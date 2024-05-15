@@ -41,15 +41,16 @@ export class CreditoCobranzaController {
     @Get('/pendientes/:empresa')
     async getDocs(@Param('empresa') empresa:empresa, @Query() filtros:cycDTO){
         return await fns.validar(async ()=>{
-        if(filtros.fechaIS!==undefined)filtros.fechaI = fns.validarFecha(filtros.fechaIS);
-        if(filtros.fechaFS!==undefined)filtros.fechaF = fns.validarFecha(filtros.fechaFS);
-        if(filtros.restanteIS!==undefined)filtros.restanteI = fns.validarNumero(filtros.restanteIS);
-        if(filtros.restanteFS!==undefined)filtros.restanteF = fns.validarNumero(filtros.restanteFS);
-        const lista = await this.cycService.getList(empresa, filtros);
-        
-        return {lista, 
-            compare:(item1, item2)=>true, 
-            fusion:(item1, item2)=>false};
+            if(filtros.fechaIS!==undefined)filtros.fechaI = fns.validarFecha(filtros.fechaIS);
+            if(filtros.fechaFS!==undefined)filtros.fechaF = fns.validarFecha(filtros.fechaFS);
+            if(filtros.restanteIS!==undefined)filtros.restanteI = fns.validarNumero(filtros.restanteIS);
+            if(filtros.restanteFS!==undefined)filtros.restanteF = fns.validarNumero(filtros.restanteFS);
+            const lista = await this.cycService.getList(empresa, filtros);
+            
+            return {lista, 
+                compare:(item1, item2)=>true, 
+                fusion:(item1, item2)=>false
+            };
        }, empresa)
     }
 

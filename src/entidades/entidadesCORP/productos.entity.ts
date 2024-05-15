@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToMany, VirtualColumn } from "typeorm";
 import Movimiento from "./movimientos.entity";
 
 @Entity({name:'admProductos'})
@@ -83,6 +83,12 @@ export default class Producto{
 
     @Column({name:'CIDVALORCLASIFICACION1'})
     calsificacion1:number
+    
+    @VirtualColumn({query: (alias)=>`SELECT CVALORCLASIFICACION
+        FROM admClasificacionesValores
+        WHERE admClasificacionesValores.CIDVALORCLASIFICACION = ${alias}.CIDVALORCLASIFICACION1`
+       })
+    familia:string
 
     @Column({name:'CIDVALORCLASIFICACION2'})
     calsificacion2:number
