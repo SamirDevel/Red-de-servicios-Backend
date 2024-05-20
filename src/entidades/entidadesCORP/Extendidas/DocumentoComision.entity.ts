@@ -96,7 +96,7 @@ export default class DocumentoComision extends Documento{
         this.aTiempo = result.aTiempo;
         this.fueraTiempo = result.fueraTiempo;
         this.adelantado = result.adelantado;
-        console.log(this);
+        //console.log(this);
     }
 
     //static

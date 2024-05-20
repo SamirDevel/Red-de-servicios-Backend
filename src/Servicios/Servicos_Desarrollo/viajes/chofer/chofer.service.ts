@@ -54,7 +54,7 @@ export class ChoferService {
         try {
             const {idCM, idCD} = await this.getIds();
             const {idCMDom, idCDDom} = await this.getIdsDom();
-            console.log(nuevoAgenteDes);
+            //console.log(nuevoAgenteDes);
             await this.chofRepo.save(nuevoAgenteDes);
             nuevoAgente.id=idCM
             nuevoAgente.domicilios[0].id = idCMDom

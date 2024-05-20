@@ -100,7 +100,7 @@ export class FacturacionService {
             const excepcionMotivo = 'es diferente del anterior. Verifique los datos e intente nuevamente.';
             if(nuevo.folioAnterior===undefined)return {mensaje:'Debe seleccionar el folio del viaje anterior'}
             const viajeAnterior = (await this.viaService.read({serie:nuevo.serieAnterior,folio:nuevo.folioAnterior}))[0];
-            console.log(nuevo)
+            //console.log(nuevo)
             console.log(viajeAnterior)
             if(viajeAnterior instanceof Viaje){
                 if(viajeAnterior.estatus!=='CANCELADO')return {mensaje:'El viaje anterior debe estar cancelado para reemplazarlos'}

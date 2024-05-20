@@ -117,6 +117,20 @@ export default class Viaje{
         }
     }
 
+    consumo:number
+
+    @AfterLoad()
+    setConsumo(){
+        this.consumo = (()=>{
+            if(this.estatus = 'COMPLETADO'){
+                return ((this.gasInicial *this.vehiculo.capacidad) + this.cargas - (this.gasFinal * this.vehiculo.capacidad))
+            }
+            else{
+                return 0
+            }
+        })() 
+    }
+
     @VirtualColumn({query:alias=>{
         return `SELECT CSEGCONT1 AS tipo
         FROM
@@ -134,3 +148,18 @@ export default class Viaje{
     @OneToMany(()=>DetalleViaje, det=>det.viaje, {cascade:true})
     detalles:DetalleViaje[]
 }
+
+/*
+@VirtualColumn({query:alias=>{
+        return `CASE
+            WHEN ${alias}.Estatus != 'COMPLETADO' THEN 0
+            ELSE ROUND((${alias}.Gas_Inicial * 
+                (SELECT Capacidad FROM ${process.env.DB_NAME_VIAJES}.dbo.Vehiculo WHERE ${alias}.Id_Vehiculo = Vehiculo.Id))
+                + ${alias}.Cargas_Gas
+                - 
+                (${alias}.Gas_Final * 
+                (SELECT Capacidad FROM ${process.env.DB_NAME_VIAJES}.dbo.Vehiculo WHERE ${alias}.Id_Vehiculo = Vehiculo.Id)), 2)
+        END`
+    }})
+    consumo:number
+*/

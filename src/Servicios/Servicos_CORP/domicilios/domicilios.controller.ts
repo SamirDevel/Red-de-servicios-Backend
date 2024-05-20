@@ -13,7 +13,7 @@ export class DomiciliosController {
         try {
             fns.validarEmpresa(empresa)
             let builder = await this.domService.getAll(empresa);
-            console.log(await builder.getMany())
+            //console.log(await builder.getMany())
             return await builder.getMany()
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Error desconocido';;

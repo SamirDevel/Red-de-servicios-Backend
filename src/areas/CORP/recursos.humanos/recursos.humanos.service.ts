@@ -88,7 +88,7 @@ export class RecursosHumanosService {
         const {idCM, idCD} = await this.getIds();
         const nuevoAgente = new Agente();
         nuevoAgente.setChofer(data)
-        console.log(nuevoAgente);
+        //console.log(nuevoAgente);
         return await this.insertToDatabase(nuevoAgente, {idCM, idCD})
     }
 
