@@ -50,7 +50,7 @@
   {
     "serie": "FG401",
     "folio": "3329",
-    "comentario": "ha estado abonando",
+    "comentario": "ha estado abonando, vilfret quedo de pagarlo",
     "name": "FG401-3329"
   },
   {
@@ -200,7 +200,8 @@
   {
     "serie": "FG401",
     "folio": "7310",
-    "comentario": "va a devolver el material\n"
+    "comentario": "va a devolver el material\n",
+    "name": "FG401-7310"
   },
   {
     "serie": "FG401",
@@ -247,7 +248,7 @@
   {
     "serie": "FG402",
     "folio": "7334",
-    "comentario": "ya no contesta",
+    "comentario": "ya no contesta, vale va a estar yendo",
     "name": "FG402-7334"
   },
   {
@@ -481,8 +482,7 @@
   {
     "serie": "FG401",
     "folio": "7622",
-    "comentario": "hector los va a cobrar",
-    "name": "FG401-7622"
+    "comentario": "hector los va a cobrar, o que los pague el"
   },
   {
     "serie": "FG401",
@@ -601,7 +601,7 @@
   {
     "serie": "FG401",
     "folio": "8035",
-    "comentario": "mande estado de cuenta para programacion de pago",
+    "comentario": "nota falta pagar un 5% del precio panel",
     "name": "FG401-8035"
   },
   {
@@ -711,5 +711,29 @@
     "folio": "8151",
     "comentario": "pago en cdc\npendiente devolucion",
     "name": "FG401-8151"
+  },
+  {
+    "serie": "FG401",
+    "folio": "6819",
+    "comentario": "pagado",
+    "name": "FG401-6819"
+  },
+  {
+    "serie": "FG401",
+    "folio": "6436",
+    "comentario": "pagado",
+    "name": "FG401-6436"
+  },
+  {
+    "serie": "FG401",
+    "folio": "6970",
+    "comentario": "pagado",
+    "name": "FG401-6970"
+  },
+  {
+    "serie": "FG402",
+    "folio": "3141",
+    "comentario": "no quiso reconcer el saldo",
+    "name": "FG402-3141"
   }
 ]
