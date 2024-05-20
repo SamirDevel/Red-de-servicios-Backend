@@ -122,7 +122,7 @@ export default class Viaje{
     @AfterLoad()
     setConsumo(){
         this.consumo = (()=>{
-            if(this.estatus = 'COMPLETADO'){
+            if(this.estatus === 'COMPLETADO'){
                 return ((this.gasInicial *this.vehiculo.capacidad) + this.cargas - (this.gasFinal * this.vehiculo.capacidad))
             }
             else{
