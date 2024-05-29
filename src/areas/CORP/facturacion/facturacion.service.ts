@@ -101,7 +101,7 @@ export class FacturacionService {
             if(nuevo.folioAnterior===undefined)return {mensaje:'Debe seleccionar el folio del viaje anterior'}
             const viajeAnterior = (await this.viaService.read({serie:nuevo.serieAnterior,folio:nuevo.folioAnterior}))[0];
             //console.log(nuevo)
-            console.log(viajeAnterior)
+            //console.log(viajeAnterior)
             if(viajeAnterior instanceof Viaje){
                 if(viajeAnterior.estatus!=='CANCELADO')return {mensaje:'El viaje anterior debe estar cancelado para reemplazarlos'}
                 if(datos[0]===null)return {mensaje:'Chofer no valido'}
@@ -162,7 +162,7 @@ export class FacturacionService {
                 .getOne();
             //serie.
             const heads = await this.viaService.getHead((nuevo.empresa)as 'cdc'|'cmp')
-            console.log(heads)
+            //console.log(heads)
             let result = await this.viaService.create({
                 ...nuevo, 
                 serie, 
