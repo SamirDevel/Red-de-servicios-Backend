@@ -65,7 +65,7 @@ export class ClientesService {
         }else if(bdname==='cmp'){
             builder = this.extRepoCMP
         }
-        return builder.query(`SELECT [CIDVALORCLASIFICACION] AS id\n`+
+        return await builder.query(`SELECT [CIDVALORCLASIFICACION] AS id\n`+
         `,[CVALORCLASIFICACION] AS nombre\n`+
         `,[CIDCLASIFICACION] AS tipo\n`+
         `,[CCODIGOVALORCLASIFICACION] AS codigo\n`+
@@ -75,6 +75,27 @@ export class ClientesService {
         `  WHEN DB_NAME() = '${process.env.DB_NAME_CDC}' THEN 8\n`+
         `END)\n`+
         `OR CIDCLASIFICACION = 0`);
+    }
+    async getClasificacion(bdname:string, id:number){
+        let builder=null;
+
+        if(bdname==='cdc'){
+            builder = this.extRepoCDC
+        }else if(bdname==='cmp'){
+            builder = this.extRepoCMP
+        }
+        const result = await builder.query(`SELECT [CIDVALORCLASIFICACION] AS id\n`+
+        `,[CVALORCLASIFICACION] AS nombre\n`+
+        `,[CIDCLASIFICACION] AS tipo\n`+
+        `,[CCODIGOVALORCLASIFICACION] AS codigo\n`+
+        `FROM [dbo].[admClasificacionesValores]\n`+
+        `WHERE CCODIGOVALORCLASIFICACION = @0\n`+
+        `AND CIDCLASIFICACION = (CASE \n`+
+        `  WHEN DB_NAME() = '${process.env.DB_NAME_CMP}' THEN 10\n`+
+        `  WHEN DB_NAME() = '${process.env.DB_NAME_CDC}' THEN 8\n`+
+        `END)\n`,[id]);
+        //console.log(result)
+        return result[0]
     }
 
     async modificar(dbname:empresa, cliente:Partial<Externo>){

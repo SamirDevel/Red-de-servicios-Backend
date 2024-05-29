@@ -45,7 +45,7 @@ export default class ModificarClienteDTO{
     formaPago:string
 
     @IsOptional()
-    @IsNumber()
+    @IsString()
     clasificacion:number
 
     @IsOptional()

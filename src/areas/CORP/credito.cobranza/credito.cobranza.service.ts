@@ -129,8 +129,8 @@ export class CreditoCobranzaService {
         return factory
     }
 
-    private modificarYValidar(parametro1,parametro2,cambio:Function){
-        if(parametro1!=parametro2)cambio(parametro1);
+    private async modificarYValidar(parametro1,parametro2,cambio:Function){
+        if(parametro1!=parametro2)await cambio(parametro1);
     }
     async modificarCliente(bdname:empresa, serie:string, folio:number, body:ModificarClienteDTO){
         try {
@@ -138,19 +138,21 @@ export class CreditoCobranzaService {
             const cliente = {id:documento['idCliente'].id};
             const domicilio = {id:documento['idCliente']['domicilios'][0]['id']};
             //console.log(body);
-            this.modificarYValidar(body.tel1, domicilio['tel1'], (valor)=>domicilio['tel1']=valor);
-            this.modificarYValidar(body.tel2, domicilio['tel2'], (valor)=>domicilio['tel2']=valor);
-            this.modificarYValidar(body.correo, cliente['mail1'], (valor)=>cliente['mail1']=valor);
-            this.modificarYValidar(body.contrarecivo, cliente['txt4'], (valor)=>cliente['txt4']=valor);
-            this.modificarYValidar(body.formaPago, cliente['txt5'], (valor)=>cliente['txt5']=valor);
-            this.modificarYValidar(body.diasCredito, cliente['diasCreditoCliente'], (valor)=>cliente['diasCreditoCliente']=valor);
-            this.modificarYValidar(body.limiteCredito, cliente['limiteCreditoCliente'], (valor)=>cliente['limiteCreditoCliente']=valor);
-            this.modificarYValidar(body.clasificacion, bdname==='cdc'?cliente['clasificacionCliente2']:cliente['clasificacionCliente4'], (valor)=>{
+            await this.modificarYValidar(body.tel1, domicilio['tel1'], (valor)=>domicilio['tel1']=valor);
+            await this.modificarYValidar(body.tel2, domicilio['tel2'], (valor)=>domicilio['tel2']=valor);
+            await this.modificarYValidar(body.correo, cliente['mail1'], (valor)=>cliente['mail1']=valor);
+            await this.modificarYValidar(body.contrarecivo, cliente['txt4'], (valor)=>cliente['txt4']=valor);
+            await this.modificarYValidar(body.formaPago, cliente['txt5'], (valor)=>cliente['txt5']=valor);
+            await this.modificarYValidar(body.diasCredito, cliente['diasCreditoCliente'], (valor)=>cliente['diasCreditoCliente']=valor);
+            await this.modificarYValidar(body.limiteCredito, cliente['limiteCreditoCliente'], (valor)=>cliente['limiteCreditoCliente']=valor);
+            await this.modificarYValidar(body.clasificacion, bdname==='cdc'?cliente['clasificacionCliente2']:cliente['clasificacionCliente4'], async (valor)=>{
+                const clasificacion = await this.extService.getClasificacion(bdname, valor);
+                //console.log(clasificacion);
                 if(bdname==='cdc')
-                    cliente['clasificacionCliente2']=valor;
-                else cliente['clasificacionCliente4']=valor;
+                    cliente['clasificacionCliente2']=clasificacion.id;
+                else cliente['clasificacionCliente4']=clasificacion.id;
             });
-            this.modificarYValidar(body.activo==true?1:0, cliente['estatus'], (valor)=>cliente['estatus']=valor);
+            await this.modificarYValidar(body.activo==true?1:0, cliente['estatus'], (valor)=>cliente['estatus']=valor);
             const msj1 = await this.extService.modificar(bdname,cliente);
             const msj2 = await this.domService.modificar(bdname,domicilio);
             this.comentarFactura({serie,folio:folio.toString()},body.observacion)

@@ -41,3 +41,4 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 src/whiteList.ts
+src/areas/CORP/credito.cobranza/comentadas.json
