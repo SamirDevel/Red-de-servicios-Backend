@@ -94,7 +94,7 @@ export default class Externo{
         WHERE admClasificacionesValores.CIDVALORCLASIFICACION = ${alias}.CIDVALORCLASIFCLIENTE1`
             
     })
-    ruta:number
+    ruta:string
 
     @Column({name:'CTIPOCLIENTE'})
     tipo:number

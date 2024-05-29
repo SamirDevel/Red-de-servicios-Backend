@@ -101,7 +101,7 @@ export class FacturacionService {
             if(nuevo.folioAnterior===undefined)return {mensaje:'Debe seleccionar el folio del viaje anterior'}
             const viajeAnterior = (await this.viaService.read({serie:nuevo.serieAnterior,folio:nuevo.folioAnterior}))[0];
             //console.log(nuevo)
-            console.log(viajeAnterior)
+            //console.log(viajeAnterior)
             if(viajeAnterior instanceof Viaje){
                 if(viajeAnterior.estatus!=='CANCELADO')return {mensaje:'El viaje anterior debe estar cancelado para reemplazarlos'}
                 if(datos[0]===null)return {mensaje:'Chofer no valido'}
@@ -161,9 +161,12 @@ export class FacturacionService {
                 .where('serie =:serie', {serie:nuevo.serie})
                 .getOne();
             //serie.
+            const heads = await this.viaService.getHead((nuevo.empresa)as 'cdc'|'cmp')
+            //console.log(heads)
             let result = await this.viaService.create({
                 ...nuevo, 
                 serie, 
+                folio:heads.folio,
                 chofer:datos[0], 
                 auxiliar, 
                 expedicion:today, 
@@ -176,6 +179,8 @@ export class FacturacionService {
                     result+=this.getVigencia(chofer.vigenciaRestante,'A la licencia del chofer');
                 if(auto.vigenciaRestante<=30)
                     result+=result+=this.getVigencia(auto.vigenciaRestante,'Al segurro del auto');
+                if(nuevo.folio!==heads.folio)
+                    result += `El folio del viaje ha cambiado, el folio real es ${heads.folio}`
             }
             return result
         } catch (error) {
