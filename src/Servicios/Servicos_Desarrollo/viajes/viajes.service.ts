@@ -69,8 +69,8 @@ export class ViajesService implements RepositoryService{
         const viaje = this.viajesRepo.create(nuevo);
         viaje.detalles = detalles.map(det=>this.detsRepo.create(det));
         try {
-            //console.log(viaje);
-            await this.viajesRepo.save(viaje);
+            console.log(viaje);
+            //await this.viajesRepo.save(viaje);
             return 'Viaje creado Exitosamente. ';
         } catch (error) {
             console.log(error);
