@@ -482,7 +482,8 @@
   {
     "serie": "FG401",
     "folio": "7622",
-    "comentario": "hector los va a cobrar, o que los pague el"
+    "comentario": "hector los va a cobrar, o que los pague el",
+    "name": "FG401-7622"
   },
   {
     "serie": "FG401",
@@ -703,7 +704,7 @@
   {
     "serie": "FG401",
     "folio": "8119",
-    "comentario": "la trae macol",
+    "comentario": "la trae maycol",
     "name": "FG401-8119"
   },
   {
