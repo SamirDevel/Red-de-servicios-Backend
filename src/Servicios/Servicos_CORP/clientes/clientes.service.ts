@@ -76,7 +76,7 @@ export class ClientesService {
         `END)\n`+
         `OR CIDCLASIFICACION = 0`);
     }
-    async getClasificacion(bdname:string, id:number){
+    async getClasificacion(bdname:string, cod:string|number){
         let builder=null;
 
         if(bdname==='cdc'){
@@ -84,20 +84,28 @@ export class ClientesService {
         }else if(bdname==='cmp'){
             builder = this.extRepoCMP
         }
-        const result = await builder.query(`SELECT [CIDVALORCLASIFICACION] AS id\n`+
-        `,[CVALORCLASIFICACION] AS nombre\n`+
-        `,[CIDCLASIFICACION] AS tipo\n`+
-        `,[CCODIGOVALORCLASIFICACION] AS codigo\n`+
-        `FROM [dbo].[admClasificacionesValores]\n`+
-        `WHERE CCODIGOVALORCLASIFICACION = @0\n`+
-        `AND CIDCLASIFICACION = (CASE \n`+
-        `  WHEN DB_NAME() = '${process.env.DB_NAME_CMP}' THEN 10\n`+
-        `  WHEN DB_NAME() = '${process.env.DB_NAME_CDC}' THEN 8\n`+
-        `END)\n`,[id]);
-        //console.log(result)
-        return result[0]
+        try {
+            const result = await builder.query(`SELECT [CIDVALORCLASIFICACION] AS id
+            ,[CVALORCLASIFICACION] AS nombre
+            ,[CIDCLASIFICACION] AS tipo
+            ,[CCODIGOVALORCLASIFICACION] AS codigo
+            FROM [dbo].[admClasificacionesValores]
+            WHERE CCODIGOVALORCLASIFICACION = @0
+            AND (CASE 
+                WHEN CIDCLASIFICACION = 0 THEN 1
+                WHEN CIDCLASIFICACION = (CASE 
+                    WHEN DB_NAME() = '${process.env.DB_NAME_CMP}' THEN 10
+                    WHEN DB_NAME() = '${process.env.DB_NAME_CDC}' THEN 8
+                END) THEN 1
+                ELSE 0
+            END) = 1`,[cod]);
+            //console.log(result)
+            return result[0]
+        } catch (error) {
+            console.log(error)
+        }
     }
-
+    
     async modificar(dbname:empresa, cliente:Partial<Externo>){
         try {
             if(dbname==='cdc')
