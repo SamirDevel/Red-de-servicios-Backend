@@ -27,7 +27,7 @@ export class AlmacenInventarioService {
         if(modelo===null)return {mensaje:'Debe seleccionar un tipo de documento'}
         if(repo!==null){
             try {
-                const query = await repo.createQueryBuilder('doc')
+                const query = repo.createQueryBuilder('doc')
                     .select('doc.expedicion', 'expedicion')
                     .addSelect('doc.serie', 'serie')
                     .addSelect('cli.nombre', 'nombre')
@@ -37,7 +37,9 @@ export class AlmacenInventarioService {
                     .addSelect('doc.cancelado', 'cancelado')
                     .addSelect('doc.unidadesPendientes', 'unidadesPendientes')
                     .addSelect(`SUM(mov.costoEspecifico)`, 'costo')
+                    .addSelect(`pro.calsificacion1`,'calsificacion1')
                     .leftJoin('doc.movimientos', 'mov')
+                    .leftJoin('mov.idProducto', 'pro')
                     .leftJoin('doc.idCliente', 'cli')
                     .where(`doc.idConcepto = ${modelo}`)
                     .andWhere('doc.expedicion >= :fechaI', {fechaI})
@@ -49,6 +51,7 @@ export class AlmacenInventarioService {
                     .addGroupBy('doc.total')
                     .addGroupBy('doc.cancelado')
                     .addGroupBy('doc.unidadesPendientes')
+                    .addGroupBy('pro.calsificacion1')
                     .addGroupBy(`(CASE WHEN cli.CRFC = 'XAXX010101000' THEN cli.CTEXTOEXTRA3 ELSE cli.CRAZONSOCIAL END)`)
                 if(filtros.estado!==undefined)query.andWhere('doc.cancelado = :estado', {estado:filtros.estado})
                 if(filtros.folioI!==undefined)query.andWhere('doc.folio >= :folioI', {folioI:filtros.folioI})
