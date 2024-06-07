@@ -26,7 +26,7 @@ export default class ComisionChoferDTO{
     auxiliar:number
 
     @IsNumber()
-    pagaAuxiliar:number
+    pagadoAuxiliar:number
 
     @IsNumber()
     descuentos:number

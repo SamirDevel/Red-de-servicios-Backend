@@ -458,23 +458,25 @@ export class ComisionService{
         try {
             //console.log(arreglo)
             for(const index in arreglo){
+                const elemento = arreglo[index];
+                //console.log(elemento);
                 const nuevo = this.regChofRepoDes.create({
                     inicio:fechaI,
                     final:fechaF,
-                    ...arreglo[index]
+                    ...elemento
                 });
                 const viajes = await this.viajesService.read({
                     estatus:'COMPLETADO',
                     finI:fechaI,
                     finF:fechaF,
-                    chofer:arreglo[index].chofer
+                    chofer:elemento.chofer
 
                 })
                 const viajesAux = (await this.viajesService.read({
                     estatus:'COMPLETADO',
                     finI:fechaI,
                     finF:fechaF,
-                    auxiliar:arreglo[index].chofer
+                    auxiliar:elemento.chofer
                     
                 }) as []).map((viaje:Viaje)=>{
                     return {...viaje, tipoRuta:4}
