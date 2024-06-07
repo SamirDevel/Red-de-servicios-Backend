@@ -736,5 +736,10 @@
     "folio": "3141",
     "comentario": "no quiso reconcer el saldo",
     "name": "FG402-3141"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9298",
+    "comentario": "Cliente pagó en abril y se facturó a otra razón social\n"
   }
 ]
