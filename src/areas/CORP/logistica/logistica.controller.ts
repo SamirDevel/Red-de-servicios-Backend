@@ -21,12 +21,7 @@ export class LogisticaController {
     @UseInterceptors(CorpOneInterceptor)
     @Get('/documento/:empresa/:serie/:folio')
     async getDocumento(@Param('empresa') empresa:'cdc'|'cmp', @Param('serie') serie:string, @Param('folio') folio:number){
-        return await fns.validar(async ()=>{
-            const builder = await this.serCYC.getOne(empresa, serie, folio);
-            const observacion = this.serCYC.getCometario({serie,folio:folio.toString()})
-            const factura = await builder.getOne;
-            return observacion!==null?{...factura, observacion}:factura;
-        },empresa)
+        return await this.serFCT.getDoc(empresa, serie, folio);
     }
     //#region viajes
     @Get('viajes/consulta')
