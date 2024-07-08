@@ -59,7 +59,10 @@ export default class RegistroComision{
 
     @AfterLoad()
     setData(){
-        this.comision = ((this.cobranza/1.16)*(this.porcentaje/100))
+        const cobrado = this.aTiempo + this.fueraTiempo;
+        const cobradoSinIva = cobrado/1.16
+        const porcentajeConsiderado = this.porcentaje - this.penalizacion
+        this.comision = (cobradoSinIva*porcentajeConsiderado/100)
         this.faltante = this.comision - this.anticipo - this.descuentos
     }
 }
