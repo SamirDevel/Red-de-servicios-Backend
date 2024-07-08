@@ -13,7 +13,6 @@ import { ViajesService } from 'src/Servicios/Servicos_Desarrollo/viajes/viajes.s
 export class LogisticaController {
     constructor(
         private serLGT:LogisticaService,
-        private serCYC:CreditoCobranzaService,
         private serFCT:FacturacionService,
         private serViajes:ViajesService
     ){}
