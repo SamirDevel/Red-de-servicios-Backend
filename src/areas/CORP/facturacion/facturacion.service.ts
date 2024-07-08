@@ -96,6 +96,7 @@ export class FacturacionService {
                 mensaje:`La factura ${detalle.serie}-${detalle.folio} no tiene seleccionado un destino`
             }
         }
+        let anterior = null
         if(nuevo.reemplazo===true){
             const excepcionMotivo = 'es diferente del anterior. Verifique los datos e intente nuevamente.';
             if(nuevo.folioAnterior===undefined)return {mensaje:'Debe seleccionar el folio del viaje anterior'}
@@ -130,6 +131,7 @@ export class FacturacionService {
                         responsable:usuarioOriginal.nombre,
                         motivo:'Documento hecho de vuelta'
                     });
+                anterior = viajeAnterior
             }else if(viajeAnterior===undefined)return {mensaje:'El viaje original no es valido'}
             else return viajeAnterior;
         }else{
@@ -172,7 +174,8 @@ export class FacturacionService {
                 expedicion:today, 
                 vehiculo:datos[1],
                 usuario:nombreusuario.id,
-                estatus:'PENDIENTE'
+                estatus:'PENDIENTE',
+                anterior
             }, nuevo.documentos)
             if(result['mensaje']===undefined){
                 if(chofer.vigenciaRestante<=30)

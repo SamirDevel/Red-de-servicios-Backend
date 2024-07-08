@@ -85,7 +85,9 @@ export class ViajesService implements RepositoryService{
                 .leftJoinAndSelect('vjs.chofer', 'cho')
                 .leftJoinAndSelect('vjs.auxiliar', 'aux')
                 .leftJoinAndSelect('vjs.vehiculo', 'veh')
-                .leftJoinAndSelect('vjs.detalles','det');
+                .leftJoinAndSelect('vjs.detalles','det')
+                .leftJoinAndSelect('vjs.anterior','ant')
+                .leftJoinAndSelect('ant.serie', 'serAnt');
         try {
             if(filtros!==undefined){
                 if(filtros.serie !==undefined)

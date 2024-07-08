@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany,
-    VirtualColumn, JoinColumn, ManyToOne, AfterLoad } from "typeorm";
+    VirtualColumn, JoinColumn, ManyToOne, AfterLoad, 
+    OneToOne} from "typeorm";
 import Chofer from "./chofer.entity";
 import Vehiculo from "./vehiculo.entity";
 import DetalleViaje from "./detalleViaje.entity";
@@ -61,6 +62,10 @@ export default class Viaje{
 
     @Column({name:'Observacion_Salida'})
     observacionSalida:string;
+
+    @JoinColumn({name:'Id_Anterior'})
+    @OneToOne(()=>Viaje, via=>via.anterior)
+    anterior:Viaje;
 
     @Column({name:'Fecha_Fin'})
     fechaFin:Date;
