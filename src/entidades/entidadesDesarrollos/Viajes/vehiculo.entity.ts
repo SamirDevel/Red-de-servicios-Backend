@@ -19,6 +19,9 @@ export default class Vehiculo{
     @Column({name:'Vigencia_Seguro'})
     vigencia:Date;
 
+    @Column({name:'Uso'})
+    uso:number;
+
     @VirtualColumn({query:(alias)=>`SELECT  CNOMBREAGENTE
     FROM ${process.env.DB_NAME_CDC}.dbo.admAgentes ag
     WHERE ag.CCODIGOAGENTE = ${alias}.Codigo`})

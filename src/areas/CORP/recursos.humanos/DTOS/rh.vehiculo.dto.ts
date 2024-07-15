@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNumber} from "class-validator";
+import { IsString, IsNumber} from "class-validator";
 
 export default class RHVehiculo{
     @IsString()
@@ -36,4 +36,7 @@ export default class RHVehiculo{
 
     @IsString()
     estatus:string;
+
+    @IsNumber()
+    uso:number
 }

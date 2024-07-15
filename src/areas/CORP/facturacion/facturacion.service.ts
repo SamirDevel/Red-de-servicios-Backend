@@ -84,10 +84,10 @@ export class FacturacionService {
         const inicio = new Date(nuevo.fechaInicio);
         inicio.setUTCHours(23, 59, 59, 999);
         const datos = await Promise.all([this.choService.getOne(nuevo.codChofer), this.vehService.getOne(nuevo.codVehiculo)])
-        const vigencia = new Date(datos[1].vigencia);
-        const licencia = new Date(datos[0].vigencia);
         const chofer =datos[0];
         const auto = datos[1];
+        const vigencia = new Date(chofer.vigencia);
+        const licencia = new Date(auto.vigencia);
         const auxiliar = nuevo.codAuxiliar!==undefined?await this.choService.getOne(nuevo.codAuxiliar):undefined
         const array = nuevo.documentos;
         for(const index in array){
@@ -105,8 +105,8 @@ export class FacturacionService {
             //console.log(viajeAnterior)
             if(viajeAnterior instanceof Viaje){
                 if(viajeAnterior.estatus!=='CANCELADO')return {mensaje:'El viaje anterior debe estar cancelado para reemplazarlos'}
-                if(datos[0]===null)return {mensaje:'Chofer no valido'}
-                if(datos[1]===null)return {mensaje:'Vehciculo no valido'}
+                if(chofer===null)return {mensaje:'Chofer no valido'}
+                if(auto===null)return {mensaje:'Vehciculo no valido'}
                 if(nuevo.gasInicial>1)return{mensaje:'El tanque no puede ser superior a 1'}
                 if(chofer.codigo!==viajeAnterior.chofer.codigo){
                     return {mensaje:`El chofer ${excepcionMotivo}`};
@@ -135,8 +135,8 @@ export class FacturacionService {
             }else if(viajeAnterior===undefined)return {mensaje:'El viaje original no es valido'}
             else return viajeAnterior;
         }else{
-            if(datos[0]===null)return {mensaje:'Chofer no valido'}
-            if(datos[1]===null)return {mensaje:'Vehciculo no valido'}
+            if(chofer===null)return {mensaje:'Chofer no valido'}
+            if(auto===null)return {mensaje:'Vehciculo no valido'}
             if(inicio<today)return{mensaje:'No puede crear viajes con fechas anteriores a la actual'}
             if(nuevo.gasInicial>1)return{mensaje:'El tanque no puede ser superior a 1'}
             if(chofer!==undefined){
@@ -151,7 +151,9 @@ export class FacturacionService {
                 if(await this.choService.onViaje(auxiliar.codigo) ===true)
                     return {mensaje:'El auxiliar ya se encuentra en viajes pendientes'};
             }
-            if(nuevo.kmInicial<datos[1].km)return{mensaje:'El kilometraje es menor al correspondiente'}
+            if(nuevo.kmInicial<auto.km)return{mensaje:'El kilometraje es menor al correspondiente'}
+            if(auto.uso===1&&nuevo.kmInicial>(auto.km + 100))
+                    return{mensaje:'El kilometraje excede al estimado para la creacion de viajes'}
             if(vigencia<today)return{mensaje:'El vehiculo no tiene un seguro vigente. Por favor seleccione otro o solicite el cambo del seguro'}
             if(licencia<today||licencia===null)return{mensaje:'El chofer tiene una lisencia vencida o no tiene liscencia. Por favor seleccione otro'}
             if(nuevo.dias<0)return{mensaje:'No puede haber una estimacion de duracion negativa'}
@@ -169,10 +171,10 @@ export class FacturacionService {
                 ...nuevo, 
                 serie, 
                 folio:heads.folio,
-                chofer:datos[0], 
+                chofer:chofer, 
                 auxiliar, 
                 expedicion:today, 
-                vehiculo:datos[1],
+                vehiculo:auto,
                 usuario:nombreusuario.id,
                 estatus:'PENDIENTE',
                 anterior

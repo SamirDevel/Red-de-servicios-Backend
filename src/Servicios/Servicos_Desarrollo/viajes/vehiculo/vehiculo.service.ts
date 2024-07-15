@@ -16,7 +16,8 @@ interface vehiculo{
     configuracion:string
     capacidad:number
     vigencia:Date
-    estatus:string
+    estatus:string,
+    uso:number
 }
 @Injectable()
 export class VehiculoService {
@@ -40,6 +41,7 @@ export class VehiculoService {
             await this.vehRepoCMP.save(nuevoAgente);
             nuevoAgente.id=idCD
             await this.vehRepoCDC.save(nuevoAgente);
+            //console.log(nuevoAgenteDes)
             return 'Agente creado con exito'
         } catch (error) {
             console.log(error)
@@ -70,7 +72,8 @@ export class VehiculoService {
             codigo:datos.codigo,
             estatus:datos.estatus,
             capacidad:datos.capacidad,
-            vigencia:datos.vigencia
+            vigencia:datos.vigencia,
+            uso:datos.uso
         });
         return await this.insert(vehiculo, vehiculoCompaq);
     }
@@ -85,6 +88,7 @@ export class VehiculoService {
             .addSelect('veh.vigenciaRestante')
             .addSelect('veh.capacidad')
             .addSelect('veh.km')
+            .addSelect('veh.uso')
             .where('veh.codigo = :codigo',{codigo})
             .getOne()
         const datos = await this.vehRepoCDC.createQueryBuilder('veh')
@@ -185,6 +189,7 @@ export class VehiculoService {
             this.comprobar(ageDES, 'capacidad', datos, 'capacidad')
             this.comprobar(ageDES, 'vigencia', datos, 'vigencia')
             this.comprobar(ageDES, 'estatus', datos, 'estatus')
+            this.comprobar(ageDES, 'uso', datos, 'uso')
             this.vehRepoDES.save(ageDES)
             await this.vehRepoCDC.save(ageCDC);
             await this.vehRepoCMP.save(ageCMP);
