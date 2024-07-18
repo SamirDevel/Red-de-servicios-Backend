@@ -86,8 +86,8 @@ export class FacturacionService {
         const datos = await Promise.all([this.choService.getOne(nuevo.codChofer), this.vehService.getOne(nuevo.codVehiculo)])
         const chofer =datos[0];
         const auto = datos[1];
-        const vigencia = new Date(chofer.vigencia);
-        const licencia = new Date(auto.vigencia);
+        const vigencia = new Date(auto.vigencia);
+        const licencia = new Date(chofer.vigencia);
         const auxiliar = nuevo.codAuxiliar!==undefined?await this.choService.getOne(nuevo.codAuxiliar):undefined
         const array = nuevo.documentos;
         for(const index in array){
