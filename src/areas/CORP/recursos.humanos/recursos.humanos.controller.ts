@@ -159,6 +159,7 @@ export class RecursosHumanosController {
     //chofer
     @Post(`chofer/crear`)
     async insertChofer(@Body() body:RHChofer){
+        //console.log(body)
         if(body.estatus!=='ACTIVO'&&body.estatus!=='INACTIVO')return{mensaje:'El estatus es nvalido'}
         else return await this.choService.create(body);
     }
