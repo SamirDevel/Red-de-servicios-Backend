@@ -1,4 +1,5 @@
 import { IsString, IsNumber, IsArray } from "class-validator";
+import { IsChar } from "src/estructuras_y_algoritmos/Decorators/IsCHar";
 
 export default class ComisionChoferDTO{
     @IsString()
@@ -29,8 +30,12 @@ export default class ComisionChoferDTO{
     pagadoAuxiliar:number
 
     @IsNumber()
-    descuentos:number
+    recalculo:number
 
     @IsString()
     motivo:string
+
+    @IsChar((char:string)=>char==='+'||char==='-'||char==='', 'char of +, -, or emprty')
+    tipoRecalculo:string
+    
 }

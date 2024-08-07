@@ -40,11 +40,14 @@ export default class RegistroComisionChofer{
     @Column('decimal',{name:'Pago_Auxiliar', scale:2, precision:12})
     pagadoAuxiliar:number
 
-    @Column('decimal',{name:'Descuentos', scale:2, precision:12})
-    descuentos:number
+    @Column('decimal',{name:'Recalculos', scale:2, precision:12})
+    recalculo:number
 
     @Column({name:'Motivo'})
-    motivo:string    
+    motivo:string
+
+    @Column({name:'Tipo_Recalculo'})
+    tipoRecalculo:string
 
     @VirtualColumn({query:(alias)=>`SELECT  CNOMBREAGENTE
     FROM ${process.env.DB_NAME_CDC}.dbo.admAgentes ag
