@@ -704,7 +704,7 @@
   {
     "serie": "FG401",
     "folio": "8119",
-    "comentario": "la trae maycol",
+    "comentario": "Pendiente devolver",
     "name": "FG401-8119"
   },
   {
@@ -740,6 +740,228 @@
   {
     "serie": "FG401",
     "folio": "9298",
-    "comentario": "Cliente pagó en abril y se facturó a otra razón social\n"
+    "comentario": "Cliente pagó en abril y se facturó a otra razón social\n",
+    "name": "FG401-9298"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9954",
+    "comentario": "SE MANDO POR PAQUETERIA",
+    "name": "FG401-9954"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9490",
+    "comentario": "SE MANDO POR PAQUETERIA",
+    "name": "FG401-9490"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8423",
+    "comentario": "MANDO CHEQUE QUE SE VA A DEPOSITAR 12/07/2024",
+    "name": "FG401-8423"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8678",
+    "comentario": "SIGUE PENDIENTE LOS ABONOS",
+    "name": "FG401-8678"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8431",
+    "comentario": "PROMESA DE PAGO 12/07/2024 LE MANDAN COMPROBANTE A VIL",
+    "name": "FG401-8431"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8532",
+    "comentario": "PROMESA DE PAGO 12/07/2024 FACTURA PERDIDA :I ",
+    "name": "FG401-8532"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9178",
+    "comentario": "pendiente una nota de credito por hacer",
+    "name": "FG401-9178"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9857",
+    "comentario": "pendiente una nota de credito por error en el precio",
+    "name": "FG401-9857"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9299",
+    "comentario": "no se le gravo el iva, por eso se le volvio a refacturar y le faltan esos $58.00",
+    "name": "FG401-9299"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9410",
+    "comentario": "PROMESA DE PAGO 26/07/2024\n",
+    "name": "FG401-9410"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9168",
+    "comentario": "Se le mando estado de cuenta",
+    "name": "FG401-9168"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8841",
+    "comentario": "comunicarme después de las 2, daniela o damiana :l paso el dato, seguir insistiendo",
+    "name": "FG401-8841"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8892",
+    "comentario": "Se va a recoger el material, no se a podido vender la malla",
+    "name": "FG401-8892"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9459",
+    "comentario": "Ya se le mando la factura para pago",
+    "name": "FG401-9459"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9338",
+    "comentario": "CHEQUES POSTFECHADOS",
+    "name": "FG401-9338"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9375",
+    "comentario": "SE MANDO ESTADO DE CUENTA A WHATSAPP",
+    "name": "FG401-9375"
+  },
+  {
+    "serie": "FG401",
+    "folio": "10068",
+    "comentario": "PAGAN EL VIERNES",
+    "name": "FG401-10068"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9485",
+    "comentario": "PAGADA 24/07/2024 transferencia",
+    "name": "FG401-9485"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9574",
+    "comentario": "SE LE MANDO ESTADO DE CUENTA",
+    "name": "FG401-9574"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9560",
+    "comentario": "SE LE MANDO ESTADO DE CUENTA",
+    "name": "FG401-9560"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9559",
+    "comentario": "SE LE MANDO ESTADO DE CUENTA",
+    "name": "FG401-9559"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9390",
+    "comentario": "YA PAGO",
+    "name": "FG401-9390"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9388",
+    "comentario": "SE MANDO ESTADO DE CUENTA, SEGUIR LLAMANDO",
+    "name": "FG401-9388"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9260",
+    "comentario": "PENDIENTE HACERLE N.C. POR EL ROTOMARTILLO",
+    "name": "FG401-9260"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9413",
+    "comentario": "comunicarme con sonia para programar el pago, cesar me dijo que regresa después",
+    "name": "FG401-9413"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9275",
+    "comentario": "PENDIENTE NOTA DE CREDITO",
+    "name": "FG401-9275"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9571",
+    "comentario": "SE MANDO A COBRAR Y NO ESTABA EL DE PAGOS",
+    "name": "FG401-9571"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8798",
+    "comentario": "PENDIENTES NOTAS DE CREDITO",
+    "name": "FG401-8798"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9481",
+    "comentario": "PENDIENTES NOTAS DE CREDITO",
+    "name": "FG401-9481"
+  },
+  {
+    "serie": "FG401",
+    "folio": "8068",
+    "comentario": "DIO UN ABONO DE $8,000",
+    "name": "FG401-8068"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9346",
+    "comentario": "NOTA DE CRÉDITO PENDIENTE\n",
+    "name": "FG401-9346"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9636",
+    "comentario": "PAGA EL LUNES",
+    "name": "FG401-9636"
+  },
+  {
+    "serie": "FG401",
+    "folio": "10166",
+    "comentario": "CHEQUE POST FECHADO",
+    "name": "FG401-10166"
+  },
+  {
+    "serie": "FG401",
+    "folio": "10609",
+    "comentario": "LLAMARLE",
+    "name": "FG401-10609"
+  },
+  {
+    "serie": "FG401",
+    "folio": "10074",
+    "comentario": "Mandarle mensaje ",
+    "name": "FG401-10074"
+  },
+  {
+    "serie": "FG401",
+    "folio": "10079",
+    "comentario": "Llamarle",
+    "name": "FG401-10079"
+  },
+  {
+    "serie": "FG401",
+    "folio": "9844",
+    "comentario": "Comunicarme por la tarde "
   }
 ]
