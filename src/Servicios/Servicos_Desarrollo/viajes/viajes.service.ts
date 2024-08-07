@@ -224,7 +224,7 @@ export class ViajesService implements RepositoryService{
         await this.bitService.fireEvent({
             registro:original.id,
             columna:this.viajesRepo.metadata.findColumnWithPropertyName(key).databaseName,
-            anterior:value!==undefined?value:original[key] as string,
+            anterior:value!==undefined?value:original[key].toString(),
             responsable:registro.responsable,
             motivo:registro.motivo
         });
@@ -237,7 +237,8 @@ export class ViajesService implements RepositoryService{
             const self = this;
             async function setEvent(key:keyof Viaje){
                 await self.fireRegister(viaje,key,registrable);
-            }            
+            }
+            
             async function compare(key:keyof Viaje){
                 if(datos[key] !==undefined){
                     if(registrable)await setEvent(key);
@@ -266,6 +267,7 @@ export class ViajesService implements RepositoryService{
             }
             //console.log('viaje');
             //console.log(viaje);
+            //console.log(datos)
             await this.viajesRepo.save(viaje);
             return 'Viaje actualizado con exito';
         } catch (error) {

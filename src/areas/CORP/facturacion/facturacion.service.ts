@@ -160,13 +160,14 @@ export class FacturacionService {
             if(nuevo.dias>3)return{mensaje:'La estimacion es superior a lo permitido'}
         }
         try {
-            const serie = await this.serRepo.createQueryBuilder()
-                .select('id')
-                .addSelect('serie')
-                .addSelect('descripcion')
+            //console.log(nuevo)
+            const serie = await this.serRepo.createQueryBuilder('ser')
+                .select('ser.id')
+                .addSelect('ser.serie')
+                .addSelect('ser.descripcion')
                 .where('serie =:serie', {serie:nuevo.serie})
                 .getOne();
-            //serie.
+            //console.log(serie)
             const heads = await this.viaService.getHead((nuevo.empresa)as 'cdc'|'cmp')
             //console.log(heads)
             let result = await this.viaService.create({
