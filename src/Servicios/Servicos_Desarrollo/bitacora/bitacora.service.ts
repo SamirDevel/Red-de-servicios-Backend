@@ -27,7 +27,9 @@ export class BitacoraService {
 
     async fireEvent(datos:registro){
         const idMotivo = await this.repMotivo.createQueryBuilder('mot')
-            .select()
+            .select('mot.id')
+            .addSelect('mot.motivo')
+            .addSelect('mot.descripcion')
             .where('mot.motivo = :m', {m:datos.motivo})
             .getOne();
         const registro = this.repRegistro.create({
@@ -40,7 +42,9 @@ export class BitacoraService {
     }
     async getMotivos(tabla:string, evento:string){
         return await this.repMotivo.createQueryBuilder('mot')
-            .select()
+            .select('mot.id')
+            .addSelect('mot.motivo')
+            .addSelect('mot.descripcion')
             .leftJoin('mot.idTabla', 'tab')
             .leftJoin('mot.idEvento', 'eve')
             .where('tab.nombre = :tabla',{tabla})
@@ -50,11 +54,15 @@ export class BitacoraService {
     async setMotivo(tabla:string, evento:string, datos:motivo){
         try {
             const idEvento = await this.repEvento.createQueryBuilder('eve')
-                .select()
+                .select('eve.id')
+                .addSelect('eve.evento')
+                .addSelect('eve.descripcion')
                 .where('eve.evento = :evento', {evento})
                 .getOne();
             const idTabla = await this.repTabla.createQueryBuilder('tab')
-                .select()
+                .select('tab.id')
+                .addSelect('tab.nombre')
+                .addSelect('tab.descripcion')
                 .where('tab.nombre = :tabla', {tabla})
                 .getOne();
             const nuevo = this.repMotivo.create({

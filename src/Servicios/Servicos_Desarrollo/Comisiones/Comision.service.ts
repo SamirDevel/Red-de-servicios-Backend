@@ -389,8 +389,33 @@ export class ComisionService{
     }
     async  getListChofer(fechaI:string, fechaF:string, tipo:number, chofer?:string){
         const respuesta = this.regChofRepoDes.createQueryBuilder('regs')
-            .select()
-            .leftJoinAndSelect('regs.detalles', 'dets')
+            .select('regs.id')
+            .addSelect('regs.inicio')
+            .addSelect('regs.final')
+            .addSelect('regs.chofer')
+            .addSelect('regs.foraneos')
+            .addSelect('regs.pagadoForaneos')
+            .addSelect('regs.aJalisco')
+            .addSelect('regs.pagadoJalisco')
+            .addSelect('regs.paradas')
+            .addSelect('regs.pagadoParadas')
+            .addSelect('regs.auxiliar')
+            .addSelect('regs.pagadoAuxiliar')
+            .addSelect('regs.recalculo')
+            .addSelect('regs.motivo')
+            .addSelect('regs.tipoRecalculo')
+            .addSelect('regs.nombre')
+            .addSelect('regs.tipo')
+            .addSelect('regs.viajes')
+            .addSelect('regs.pagaForaneos')
+            .addSelect('regs.pagaJalisco')
+            .addSelect('regs.pagaParadas')
+            .addSelect('regs.pagaAuxiliar')
+            .addSelect('dets.id')
+            .addSelect('dets.serie')
+            .addSelect('dets.folio')
+            .addSelect('dets.tipoRuta')
+            .leftJoin('regs.detalles', 'dets')
             .where('regs.inicio = :fechaI AND regs.final = :fechaF',{fechaI,fechaF})
         if(chofer!==undefined){
             respuesta.andWhere('regs.chofer = :chofer', {chofer});
@@ -399,6 +424,7 @@ export class ComisionService{
         const filtrados = resultado.filter(registro=>{
             return registro.tipo===tipo
         });
+        console.log(filtrados)
         return await Promise.all(filtrados.map(async chofer=>{
             chofer.detalles = await Promise.all(chofer.detalles.map(async det=>{
                 const viaje = await this.viajesService.read({serie:det.serie, folio:det.folio});
@@ -597,4 +623,3 @@ class AuxiliarComision{
         this.deps = lista;
     }
 }
-

@@ -115,7 +115,12 @@ export class RecursosHumanosService {
     async setRelacionesAgentes(admin:string, dep:string){
         try {
             const codDependiente = await this.ageRepoDes.createQueryBuilder('dep')
-                .select()
+                .select('dep.id')
+                .addSelect('dep.codigo')
+                .addSelect('dep.grupo')
+                .addSelect('dep.estatus')
+                .addSelect('dep.esquema')
+                .addSelect('dep.nombre')
                 .where('dep.codigo = :dep', {dep})
                 .getOne()
                 const relacion = this.relRepoDes.create({

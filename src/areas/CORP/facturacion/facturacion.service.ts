@@ -161,7 +161,9 @@ export class FacturacionService {
         }
         try {
             const serie = await this.serRepo.createQueryBuilder()
-                .select()
+                .select('id')
+                .addSelect('serie')
+                .addSelect('descripcion')
                 .where('serie =:serie', {serie:nuevo.serie})
                 .getOne();
             //serie.

@@ -34,7 +34,15 @@ export class FacturaCerradaService {
     async read(filtros?:Partial<cerrarFactura>){
         try {
             const query = this.facturaCerradaRepo.createQueryBuilder('cer')
-                .select()
+                .select('cer.id')
+                .addSelect('cer.serie')
+                .addSelect('cer.folio')
+                .addSelect('cer.motivo')
+                .addSelect('cer.fecha')
+                .addSelect('cer.nombre')
+                .addSelect('cer.codigo')
+                .addSelect('cer.expedicion')
+                .addSelect('cer.total')
             if(filtros.serie!==undefined)
                 query.andWhere('cer.serie = :serie', {serie:filtros.serie})
             if(filtros.folio!==undefined)
