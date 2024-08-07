@@ -494,7 +494,7 @@ export class ComisionService{
                 });
                 nuevo.detalles = detalles.map(det=>det);
                 //console.log(nuevo);
-                this.regChofRepoDes.save(nuevo);
+                await this.regChofRepoDes.save(nuevo);
             }
             return 'Comisiones guardadas con exito'
         } catch (error) {
